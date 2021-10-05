@@ -5,7 +5,8 @@ Generate a lexical analyzer for a MINI-L.
 
 ### Getting Started
 
-### Installing
+### Dependencies
+* Flex
 
 ### Executing program
 * $make command generates a C program and compiles using GCC 
