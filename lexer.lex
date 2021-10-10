@@ -26,7 +26,7 @@ ident		{letter}(letter|digit)*
 "while"		printf("WHILE");
 "do"		printf("DO");
 "beginloop"	printf("BEGINLOOP");
-"endloop"	prittf("ENDLOOP");
+"endloop"	printf("ENDLOOP");
 "continue"	printf("CONTINUE");
 "read"		printf("READ");
 "write"		printf("WRITE");
@@ -55,12 +55,13 @@ ident		{letter}(letter|digit)*
 "["		printf("L_SQUARE_BRACKET");
 "]"		printf("R_SQUARE_BRACKET");
 ":="		printf("ASSIGN");
-{signedNat}	printf("NUMBER %d", signedNat);
-{ident}		printf("IDENT %s", ident);
-.		printf("Invalid input\n"); return;
+"signedNat"	printf("NUMBER %d", yytext);
+"ident"		printf("IDENT %s", yytext);
+.		printf("Invalid input\n"); return -1;
 %%
 
-main(){
+int main(){
 	//printf("Give me your input\n");
 	yylex();
+	return 0;
 }
