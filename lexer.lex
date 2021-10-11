@@ -1,7 +1,7 @@
 digit		[0-9]
 nat		{digit}+
 signedNat	(+|-)?{nat}
-signedNatural   [+-]?[0-9]+
+signedNatural   [+-]?[0-9]+({whitespace}?)
 alpha		[a-fA-F]
 letter		[a-zA-Z]
 hextail		({digit}|{alpha}){1,8}
@@ -14,13 +14,16 @@ tab		"	"
 comment		"##[^{newline}]*"
 comment2	##.*
 whitespace	({newline}|{blank}|{tab}|{comment})+
-
+error1		[+-]?[0-9]+{letter}		
+error2          [a-zA-Z]([a-zA-Z|0-9|_]*[_])
 %{
 	int numline = 1;
         int numcol = 1;
 %}
 
 %%
+{error1}	printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", numline, numcol, yytext); return -1;
+{error2}	printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", numline, numcol, yytext); return -1;
 {newline}	numline++; numcol=1;
 {blank}		numcol++;
 {comment2} 	numcol += yyleng;
