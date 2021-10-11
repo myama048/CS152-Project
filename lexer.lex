@@ -1,11 +1,12 @@
 digit		[0-9]
 nat		{digit}+
-signedNat	(+|-}?{nat}
+signedNat	{+|-}?{nat}
 alpha		[a-fA-F]
 letter		[a-zA-Z]
 hextail		({digit}|{alpha}){1,8}
 hex		0[xX]{hextail}
-ident		{letter}(letter|digit)*
+ident		{letter}({letter|digit|_}*{letter|digit})
+identity        [a-zA-Z]([a-zA-Z|0-9|_]*[a-zA-Z|0-9])?
 newline		"\n"
 blank		" "
 tab		"	"
@@ -14,7 +15,7 @@ whitespace	({newline}|{blank}|{tab}|{comment})+
 
 
 %%
-{blank}         printf("BLANK\n");
+"blank"		printf("BLANK\n");
 "function"	printf("FUNCTION\n");
 "beginparams"	printf("BEGIN_PARAMS\n");
 "endparams"	printf("END_PARAMS\n");
@@ -62,7 +63,7 @@ whitespace	({newline}|{blank}|{tab}|{comment})+
 "]"		printf("R_SQUARE_BRACKET\n");
 ":="		printf("ASSIGN\n");
 "signedNat"	printf("NUMBER %d\n", yytext);
-"ident"		printf("IDENT %s\n", yytext);
+"identity"	printf("IDENT %s\n", yytext);
 .		printf("Invalid input\n"); return -1;
 %%
 
