@@ -1,88 +1,78 @@
-%option noyywrap
-digit		[0-9]
-nat		{digit}+
-signedNat	(+|-)?{nat}
-signedNatural   [+-]?[0-9]+({whitespace}?)
-alpha		[a-fA-F]
-letter		[a-zA-Z]
-hextail		({digit}|{alpha}){1,8}
-hex		0[xX]{hextail}
-ident		{letter}({letter|digit|_}*{letter|digit})
-identity        [a-zA-Z]([a-zA-Z|0-9|_]*[a-zA-Z|0-9])?
-newline		"\n"
-blank		" "
-tab		"	"
-comment		"##[^{newline}]*"
-comment2	##.*
-whitespace	({newline}|{blank}|{tab}|{comment})+
-error1		[+-]?[0-9]+{letter}		
-error2          [a-zA-Z]([a-zA-Z|0-9|_]*[_])
 %{
-	int numline = 1;
-        int numcol = 1;
+    #include "y.tab.h"
+    int curr_line = 1; int curr_pos = 1;
 %}
 
-%%
-{error1}	printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", numline, numcol, yytext); return -1;
-{error2}	printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", numline, numcol, yytext); return -1;
-{newline}	numline++; numcol=1;
-{blank}		numcol++;
-{comment2} 	numcol += yyleng;
-{tab}		numcol += yyleng;
-"function"	printf("FUNCTION\n"); numcol += yyleng;
-"beginparams"	printf("BEGIN_PARAMS\n"); numcol += yyleng;
-"endparams"	printf("END_PARAMS\n"); numcol += yyleng;
-"beginlocals"	printf("BEGIN_LOCALS\n"); numcol += yyleng;
-"endlocals"	printf("END_LOCALS\n"); numcol += yyleng;
-"beginbody"	printf("BEGIN_BODY\n"); numcol += yyleng;
-"endbody"	printf("END_BODY\n"); numcol += yyleng;
-"integer"	printf("INTEGER\n"); numcol += yyleng;
-"array"		printf("ARRAY\n"); numcol += yyleng;
-"of"		printf("OF\n"); numcol += yyleng;
-"if"		printf("IF\n"); numcol += yyleng;
-"then"		printf("THEN\n"); numcol += yyleng;
-"endif"		printf("ENDIF\n"); numcol += yyleng;
-"else"		printf("ELSE\n"); numcol += yyleng;
-"while"		printf("WHILE\n"); numcol += yyleng;
-"do"		printf("DO\n"); numcol += yyleng;
-"beginloop"	printf("BEGINLOOP\n"); numcol += yyleng;
-"endloop"	printf("ENDLOOP\n"); numcol += yyleng;
-"continue"	printf("CONTINUE\n"); numcol += yyleng;
-"read"		printf("READ\n"); numcol += yyleng;
-"write"		printf("WRITE\n"); numcol += yyleng;
-"and"		printf("AND\n"); numcol += yyleng;
-"or"		printf("OR\n"); numcol += yyleng;
-"not"		printf("NOT\n"); numcol += yyleng;
-"true"		printf("TRUE\n"); numcol += yyleng;
-"false"		printf("FALSE\n"); numcol += yyleng;
-"return"	printf("RETURN\n"); numcol += yyleng;
-"-"		printf("SUB\n"); numcol += yyleng;
-"+"		printf("ADD\n"); numcol += yyleng;
-"*"		printf("MULT\n"); numcol += yyleng;
-"/"		printf("DIV\n"); numcol += yyleng;
-"%"		printf("MOD\n"); numcol += yyleng;
-"=="		printf("EQ\n"); numcol += yyleng;
-"<>"		printf("NEQ\n"); numcol += yyleng;
-"<"		printf("LT\n"); numcol += yyleng;
-">"		printf("GT\n"); numcol += yyleng;
-"<="		printf("LTE\n"); numcol += yyleng;
-">="		printf("GTE\n"); numcol += yyleng;
-";"		printf("SEMICOLON\n"); numcol += yyleng;
-":"		printf("COLON\n"); numcol += yyleng;
-","		printf("COMMA\n"); numcol += yyleng;
-"("		printf("L_PAREN\n"); numcol += yyleng;
-")"		printf("R_PAREN\n"); numcol += yyleng;
-"["		printf("L_SQUARE_BRACKET\n"); numcol += yyleng;
-"]"		printf("R_SQUARE_BRACKET\n"); numcol += yyleng;
-":="		printf("ASSIGN\n"); numcol += yyleng;
-{signedNatural}	printf("NUMBER %s\n", yytext); numcol += yyleng;
-{identity}	printf("IDENT %s\n", yytext); numcol += yyleng;
-.		printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", numline, numcol, yytext); return -1;
-%%
+DIGIT        [0-9]
+CHAR         [a-zA-Z]
+IDENT        [a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9] 
+LETTER_START [_0-9][[a-zA-Z]|[0-9]|[_]]*
+UNDERSCORE   [a-zA-Z][_a-zA-Z0-9]*[_]
 
-/*int main(){
-	//printf("Give me your input\n");
-	int numline = 1;
-	yylex();
-	return 0;
-}*/
+%%
+function    {curr_pos += yyleng; return FUNCTION;}
+beginparams {curr_pos += yyleng; return BEGIN_PARAMS;}
+endparams   {curr_pos += yyleng; return END_PARAMS;}
+beginlocals {curr_pos += yyleng; return BEGIN_LOCALS;}
+endlocals   {curr_pos += yyleng; return END_LOCALS;}
+beginbody   {curr_pos += yyleng; return BEGIN_BODY;}
+endbody     {curr_pos += yyleng; return END_BODY;}
+integer     {curr_pos += yyleng; return INTEGER;}
+array       {curr_pos += yyleng; return ARRAY;}
+enum        {curr_pos += yyleng; return ENUM;}
+of          {curr_pos += yyleng; return OF;}
+if          {curr_pos += yyleng; return IF;}
+then        {curr_pos += yyleng; return THEN;}
+endif       {curr_pos += yyleng; return ENDIF;}
+else        {curr_pos += yyleng; return ELSE;}
+while       {curr_pos += yyleng; return WHILE;}
+do          {curr_pos += yyleng; return DO;}
+beginloop   {curr_pos += yyleng; return BEGINLOOP;}
+endloop     {curr_pos += yyleng; return ENDLOOP;}
+continue    {curr_pos += yyleng; return CONTINUE;}
+read        {curr_pos += yyleng; return READ;}
+write       {curr_pos += yyleng; return WRITE;}
+and         {curr_pos += yyleng; return AND;}
+or          {curr_pos += yyleng; return OR;}
+not         {curr_pos += yyleng; return NOT;}
+true        {curr_pos += yyleng; return TRUE;}
+false       {curr_pos += yyleng; return FALSE;}
+return      {curr_pos += yyleng; return RETURN;}
+
+"-"         {curr_pos += yyleng; return SUB;}
+"+"         {curr_pos += yyleng; return ADD;}
+"*"         {curr_pos += yyleng; return MULT;}
+"/"         {curr_pos += yyleng; return DIV;}
+"%"         {curr_pos += yyleng; return MOD;}
+
+"=="        {curr_pos += yyleng; return EQ;}
+"<>"        {curr_pos += yyleng; return NEQ;}
+"<"         {curr_pos += yyleng; return LT;}
+">"         {curr_pos += yyleng; return GT;}
+"<="        {curr_pos += yyleng; return LTE;}
+">="        {curr_pos += yyleng; return GTE;}
+
+(\.{DIGIT}+)|({DIGIT}+(\.{DIGIT}*)?([eE][+-])?([0-9]+)?) {curr_pos += yyleng; yylval.num_val = atoi(yytext); return NUMBER;}
+{IDENT}     {curr_pos += yyleng; yylval.id_val = strdup(yytext); return IDENT;}
+{CHAR}      {curr_pos += yyleng; yylval.id_val = strdup(yytext); return IDENT;}
+"##".*      {curr_line++; curr_pos = 1;}
+
+";"         {curr_pos += yyleng; return SEMICOLON;}
+":"         {curr_pos += yyleng; return COLON;}
+","         {curr_pos += yyleng; return COMMA;}
+"("         {curr_pos += yyleng; return L_PAREN;}
+")"         {curr_pos += yyleng; return R_PAREN;}
+"["         {curr_pos += yyleng; return L_SQUARE_BRACKET;}
+"]"         {curr_pos += yyleng; return R_SQUARE_BRACKET;}
+":="        {curr_pos += yyleng; return ASSIGN;}
+
+[ \t]+      {curr_pos += yyleng;}
+"\n"        {curr_line++; curr_pos = 1;}
+
+{UNDERSCORE} {printf("Error at line %d, column %d: identifier \"%s\" cannot end with underscore \n", curr_line, curr_pos, yytext);exit(1);}
+
+{LETTER_START} {printf("Error at line %d, column %d: identifer \"%s\" must begin with a letter\n", curr_line, curr_pos, yytext); exit(1);} 
+
+. {printf("Error at line %d, column %d: Unrecognized symbol \"%s\"\n", curr_line, curr_pos, yytext); exit(1);}
+
+%%
