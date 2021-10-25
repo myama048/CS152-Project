@@ -132,12 +132,6 @@ number: NUMBER {printf("NUMBER %d \n", $1);}
 
 // Main method
 int main(int argc, char** argv) {
-  if (argc > 1) {
-      yyin = fopen(argv[1], "r");
-      if (yyin == NULL) {
-         printf("Syntax: %s filename", argv[0]);
-		}
-	}
    yyparse();
    return 0;
 }
