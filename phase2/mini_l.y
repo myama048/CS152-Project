@@ -2,8 +2,8 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	void yyerror(const char *msg);
-	extern int currLine;
-	extern int currPos;
+	extern int numline;
+	extern int numcol;
 	FILE * yyin;
 %}
 
@@ -33,7 +33,6 @@ prog_start:	functions { printf("prog_start -> functions\n");}
 	;
 
 functions:	/*empty*/{printf("functions -> epsilon\n");}	
-	| function {printf("functions -> function\n");}
 	| function functions {printf("functions -> function functions\n");}
 	;
 
@@ -144,5 +143,5 @@ int main(int argc, char ** argv) {
 }
 
 void yyerror(const char *msg) {
-	printf("Error: Line %d, position %d: %s \n", currLine, currPos, msg);
+	printf("Error: Line %d, position %d: %s \n", numline, numcol, msg);
 }

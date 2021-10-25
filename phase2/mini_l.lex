@@ -1,4 +1,3 @@
-%option noyywrap
 digit		[0-9]
 nat		{digit}+
 signedNat	(+|-)?{nat}
@@ -50,7 +49,7 @@ error2          [a-zA-Z]([a-zA-Z|0-9|_]*[_])
 "continue"	printf("CONTINUE\n"); numcol += yyleng;
 "read"		printf("READ\n"); numcol += yyleng;
 "write"		printf("WRITE\n"); numcol += yyleng;
-"and"		printf("AND\n"); numcol += yyleng;
+"an"		printf("AND\n"); numcol += yyleng;
 "or"		printf("OR\n"); numcol += yyleng;
 "not"		printf("NOT\n"); numcol += yyleng;
 "true"		printf("TRUE\n"); numcol += yyleng;
