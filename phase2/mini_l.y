@@ -1,45 +1,32 @@
-/ Includes stuff
 %{
-#include <stdio.h>
-#include <stdlib.h>
-
-extern int yylex();
-extern int yyparse();
-extern FILE* yyin;
-
-void yyerror(const char* msg);
-
-extern int numline;
-extern int numcol;
-FILE *yyin;
+	#include <stdio.h>
+	#include <stdlib.h>
+	void yyerror(const char *msg);
+	extern int currLine;
+	extern int currPos;
+	FILE * yyin;
 %}
 
-
-// Assigning value to property of yyval
 %union {
-  int num_val;
-  char* id_val;
+	int num_val;
+	char* id_val;
 }
 
 %error-verbose
-// Define tokens
-
 %start prog_start
-// All tokens same as Phase 1
-%token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY ENUM OF IF THEN ENDIF ELSE WHILE DO BEGINLOOP ENDLOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN SUB ADD MULT DIV MOD EQ NEQ LT GT LTE GTE SEMICOLON COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN END
-
-%token <num_val> NUMBER
+%token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS
+END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY OF IF THEN
+ENDIF ELSE WHILE FOR DO BEGINLOOP ENDLOOP CONTINUE READ
+WRITE TRUE FALSE SEMICOLON COLON COMMA L_PAREN R_PAREN
+L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN RETURN
+%token BREAK ENUM
 %token <id_val> IDENT
+%token <num_val> NUMBER
+%left AND OR
+%left SUB ADD MULT DIV MOD
+%left EQ NEQ LT GT LTE GTE
+%right NOT ASSIGN
 
-%right ASSIGN
-%left OR
-%left AND
-%right NOT
-%left NEQ EQ GTE GT LTE LT
-%left ADD SUB
-%left MULT DIV MOD
-
-// Grammer defined below
 %%
 
 prog_start:	functions { printf("prog_start -> functions\n");}
@@ -145,13 +132,17 @@ identifier:	IDENT {printf("identifier -> IDENT %s\n", $1);}
 
 %%
 
-// Main method
-int main(int argc, char** argv) {
-   yyparse();
-   return 0;
+int main(int argc, char ** argv) {
+	if (argc > 1) {
+		yyin = fopen(argv[1], "r");
+		if (yyin == NULL) {
+			printf("syntax: %s filename", argv[0]);
+		}
+	}
+	yyparse();
+	return 0;
 }
-// Error method
-void yyerror(const char* msg) {
-  printf("Error: line %d, position: %d: %s \n", numline, numcol, msg);
-  exit(1);
+
+void yyerror(const char *msg) {
+	printf("Error: Line %d, position %d: %s \n", currLine, currPos, msg);
 }
