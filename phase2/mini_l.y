@@ -42,7 +42,6 @@ FILE *yyin;
 // Grammer defined below
 %%
 
-
 prog_start: 	Functions {printf("prog_start -> Functions\n");}
 	;
 Functions:  {printf("functions -> epsilon\n");}
@@ -57,6 +56,10 @@ declaration: Identifiers COLON ENUM L_PAREN Identifiers R_PAREN {printf("declara
 	| Identifiers COLON INTEGER {printf("declaration -> Identifiers COLON INTEGER\n");}
 	| Identifiers COLON ARRAY L_SQUARE_BRACKET number R_SQUARE_BRACKET OF INTEGER {printf("declaration -> Identifiers COLON ARRAY L_SQUARE_BRACKET number R_SQUARE_BRACKET OF INTEGER\n");}
 	;
+Identifiers: identifier {printf("Identifiers -> identifier \n");} 
+	| identifier COMMA Identifiers {printf("Identifiers -> identifier COMMA Identifiers \n");}
+	;
+identifier: IDENT {printf("identifier -> IDENT %s\n", $1);}
 Statements: statement SEMICOLON Statements {printf("Statements -> statement SEMICOLON Statements \n");}  
 	| {printf("Statements -> epsilon \n");}
 	;
@@ -70,10 +73,6 @@ statement: Var ASSIGN Expression {printf("statement -> Var ASSIGN Expression \n"
 	| CONTINUE {printf("statement -> CONTINUE\n");}
 	| RETURN Expression {printf("statement -> RETURN Expression\n");}
 	;
-Identifiers: identifier {printf("Identifiers -> identifier \n");} 
-	| identifier COMMA Identifiers {printf("Identifiers -> identifier COMMA Identifiers \n");}
-	;
-identifier: IDENT {printf("identifier -> IDENT %s\n", $1);}
 Vars: Var {printf("Vars -> Var\n");}
 	| Var COMMA Vars {printf("Vars -> Var COMMA Vars");}
 	;
@@ -84,6 +83,7 @@ Bool_Exprs: Bool_Expr {printf("Bool_Exprs -> Bool_Expr\n");}
 	| Bool_Expr OR Bool_Exprs {printf("Bool_Exprs -> Bool_Expr OR Bool_Exprs \n");}
 	;
 Bool_Expr: Relation_And_Exprs {printf("Bool_Expr -> Relation_And_Expr \n");}
+	;
 Relation_And_Exprs: Relation_And_Expr {printf("Relation_And_Exprs -> Relation_And_Expr\n");}
 	| Relation_And_Expr AND Relation_And_Exprs {printf("Relation_And_Exprs -> Relation_And_Expr AND Relation-And-Exprs\n");}
 	;
@@ -127,7 +127,6 @@ Term: Var {printf("Term -> Var\n");}
 	| identifier L_PAREN Expressions R_PAREN {printf("Term -> identifier L_PAREN Expressions R_PAREN\n");}
 	;
 number: NUMBER {printf("NUMBER %d \n", $1);}
-
 %%
 
 // Main method
