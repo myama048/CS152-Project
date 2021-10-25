@@ -1,31 +1,20 @@
-// Includes stuff
 %{
 #include <stdio.h>
 #include <stdlib.h>
-
-extern int yylex();
-extern int yyparse();
-extern FILE* yyin;
-
-void yyerror(const char* msg);
-
-extern int numline;
-extern int numcol;
-FILE *yyin;
+void yyerror(const char *msg);
+extern int curr_line;
+extern int curr_pos;
+FILE * yyin;
 %}
 
-
-// Assigning value to property of yyval
 %union {
-  int num_val;
-  char* id_val;
+    int num_val;
+    char* id_val;
 }
 
-%error-verbose
-// Define tokens
+%error-verbose 
 
 %start prog_start
-// All tokens same as Phase 1
 %token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY ENUM OF IF THEN ENDIF ELSE WHILE DO BEGINLOOP ENDLOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN SUB ADD MULT DIV MOD EQ NEQ LT GT LTE GTE SEMICOLON COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN END
 
 %token <num_val> NUMBER
@@ -39,9 +28,7 @@ FILE *yyin;
 %left ADD SUB
 %left MULT DIV MOD
 
-// Grammer defined below
 %%
-
 prog_start: 	Functions {printf("prog_start -> Functions\n");}
 	;
 Functions:  {printf("functions -> epsilon\n");}
@@ -127,15 +114,22 @@ Term: Var {printf("Term -> Var\n");}
 	| identifier L_PAREN Expressions R_PAREN {printf("Term -> identifier L_PAREN Expressions R_PAREN\n");}
 	;
 number: NUMBER {printf("NUMBER %d \n", $1);}
+
+
 %%
 
-// Main method
 int main(int argc, char** argv) {
-   yyparse();
-   return 0;
+	if (argc > 1) {
+	    yyin = fopen(argv[1], "r");
+	    if (yyin == NULL) {
+		printf("Syntax: %s filename", argv[0]);
+	    }
+	}
+	yyparse();
+	return 0;
 }
-// Error method
-void yyerror(const char* msg) {
-  printf("Error: line %d, position: %d: %s \n", numline, numcol, msg);
-  exit(1);
+
+void yyerror(const char *msg) {
+	printf("Error: line %d, position: %d: %s \n", curr_line, curr_pos, msg);
+	exit(1);
 }
