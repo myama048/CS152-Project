@@ -1,3 +1,4 @@
+%option noyywrap
 digit		[0-9]
 nat		{digit}+
 signedNat	(+|-)?{nat}
@@ -79,9 +80,9 @@ error2          [a-zA-Z]([a-zA-Z|0-9|_]*[_])
 .		printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", numline, numcol, yytext); return -1;
 %%
 
-int main(){
+/*int main(){
 	//printf("Give me your input\n");
 	int numline = 1;
 	yylex();
 	return 0;
-}
+}*/

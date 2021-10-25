@@ -128,7 +128,7 @@ number: NUMBER {printf("NUMBER %d \n", $1);}
 %%
 
 // Main method
-int main(int argc, char) {
+int main(int argc, char** argv) {
   if (argc > 1) {
       yyin = fopen(argv[1], "r");
       if (yyin == NULL) {
@@ -140,6 +140,6 @@ int main(int argc, char) {
 }
 // Error method
 void yyerror(const char* msg) {
-  printf("Error: line %d, position: %d: %s \n", curr_line, curr_pos, msg);
+  printf("Error: line %d, position: %d: %s \n", numline, numcol, msg);
   exit(1);
 }
