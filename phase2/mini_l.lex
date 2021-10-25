@@ -1,78 +1,299 @@
 %{
-    #include "y.tab.h"
-    int curr_line = 1; int curr_pos = 1;
+	#include <stdio.h>
+	#include <math.h>
+	int currLine = 1, currPos = 1;
+	#include "y.tab.h"
 %}
 
-DIGIT        [0-9]
-CHAR         [a-zA-Z]
-IDENT        [a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9] 
-LETTER_START [_0-9][[a-zA-Z]|[0-9]|[_]]*
-UNDERSCORE   [a-zA-Z][_a-zA-Z0-9]*[_]
+DIGIT		[0-9]
+LETTER		[a-zA-Z]
+
+ID		[a-zA-Z]([a-zA-Z|0-9|_]*[a-zA-Z|0-9])?
+UNDERSCORE	[a-zA-Z][a-zA-Z0-9_]*[_]
+LETTER_START	[0-9_][a-zA-Z|0-9_]*
+
+COMMENT		##.*
 
 %%
-function    {curr_pos += yyleng; return FUNCTION;}
-beginparams {curr_pos += yyleng; return BEGIN_PARAMS;}
-endparams   {curr_pos += yyleng; return END_PARAMS;}
-beginlocals {curr_pos += yyleng; return BEGIN_LOCALS;}
-endlocals   {curr_pos += yyleng; return END_LOCALS;}
-beginbody   {curr_pos += yyleng; return BEGIN_BODY;}
-endbody     {curr_pos += yyleng; return END_BODY;}
-integer     {curr_pos += yyleng; return INTEGER;}
-array       {curr_pos += yyleng; return ARRAY;}
-enum        {curr_pos += yyleng; return ENUM;}
-of          {curr_pos += yyleng; return OF;}
-if          {curr_pos += yyleng; return IF;}
-then        {curr_pos += yyleng; return THEN;}
-endif       {curr_pos += yyleng; return ENDIF;}
-else        {curr_pos += yyleng; return ELSE;}
-while       {curr_pos += yyleng; return WHILE;}
-do          {curr_pos += yyleng; return DO;}
-beginloop   {curr_pos += yyleng; return BEGINLOOP;}
-endloop     {curr_pos += yyleng; return ENDLOOP;}
-continue    {curr_pos += yyleng; return CONTINUE;}
-read        {curr_pos += yyleng; return READ;}
-write       {curr_pos += yyleng; return WRITE;}
-and         {curr_pos += yyleng; return AND;}
-or          {curr_pos += yyleng; return OR;}
-not         {curr_pos += yyleng; return NOT;}
-true        {curr_pos += yyleng; return TRUE;}
-false       {curr_pos += yyleng; return FALSE;}
-return      {curr_pos += yyleng; return RETURN;}
 
-"-"         {curr_pos += yyleng; return SUB;}
-"+"         {curr_pos += yyleng; return ADD;}
-"*"         {curr_pos += yyleng; return MULT;}
-"/"         {curr_pos += yyleng; return DIV;}
-"%"         {curr_pos += yyleng; return MOD;}
+{COMMENT} {
+		currPos += yyleng;
+}
 
-"=="        {curr_pos += yyleng; return EQ;}
-"<>"        {curr_pos += yyleng; return NEQ;}
-"<"         {curr_pos += yyleng; return LT;}
-">"         {curr_pos += yyleng; return GT;}
-"<="        {curr_pos += yyleng; return LTE;}
-">="        {curr_pos += yyleng; return GTE;}
+function {
+		currPos += yyleng;
+		return(FUNCTION);
+}
 
-(\.{DIGIT}+)|({DIGIT}+(\.{DIGIT}*)?([eE][+-])?([0-9]+)?) {curr_pos += yyleng; yylval.num_val = atoi(yytext); return NUMBER;}
-{IDENT}     {curr_pos += yyleng; yylval.id_val = strdup(yytext); return IDENT;}
-{CHAR}      {curr_pos += yyleng; yylval.id_val = strdup(yytext); return IDENT;}
-"##".*      {curr_line++; curr_pos = 1;}
+beginparams {
+		currPos += yyleng;
+		return(BEGIN_PARAMS);
+}
 
-";"         {curr_pos += yyleng; return SEMICOLON;}
-":"         {curr_pos += yyleng; return COLON;}
-","         {curr_pos += yyleng; return COMMA;}
-"("         {curr_pos += yyleng; return L_PAREN;}
-")"         {curr_pos += yyleng; return R_PAREN;}
-"["         {curr_pos += yyleng; return L_SQUARE_BRACKET;}
-"]"         {curr_pos += yyleng; return R_SQUARE_BRACKET;}
-":="        {curr_pos += yyleng; return ASSIGN;}
+endparams {
+		currPos += yyleng;
+		return(END_PARAMS);
+}
 
-[ \t]+      {curr_pos += yyleng;}
-"\n"        {curr_line++; curr_pos = 1;}
+beginlocals {
+		currPos += yyleng;
+		return(BEGIN_LOCALS);
+}
 
-{UNDERSCORE} {printf("Error at line %d, column %d: identifier \"%s\" cannot end with underscore \n", curr_line, curr_pos, yytext);exit(1);}
+endlocals {
+		currPos += yyleng;
+		return(END_LOCALS);
+}
 
-{LETTER_START} {printf("Error at line %d, column %d: identifer \"%s\" must begin with a letter\n", curr_line, curr_pos, yytext); exit(1);} 
+beginbody {
+		currPos += yyleng;
+		return(BEGIN_BODY);
+}
 
-. {printf("Error at line %d, column %d: Unrecognized symbol \"%s\"\n", curr_line, curr_pos, yytext); exit(1);}
+endbody {
+		currPos += yyleng;
+		return(END_BODY);
+}
+
+integer {
+		currPos += yyleng;
+		return(INTEGER);
+}
+
+array {
+		currPos += yyleng;
+		return(ARRAY);
+}
+
+of {
+		currPos += yyleng;
+		return(OF);
+}
+
+if {
+		currPos += yyleng;
+		return(IF);
+}
+
+then {
+		currPos += yyleng;
+		return(THEN);
+}
+
+endif {
+		currPos += yyleng;
+		return(ENDIF);
+}
+
+else {
+		currPos += yyleng;
+		return(ELSE);
+}
+
+while {
+		currPos += yyleng;
+		return(WHILE);
+}
+
+do {
+		currPos += yyleng;
+		return(DO);
+}
+
+beginloop {
+		currPos += yyleng;
+		return(BEGINLOOP);
+}
+
+endloop {
+		currPos += yyleng;
+		return(ENDLOOP);
+}
+
+break {
+		currPos += yyleng;
+		return(BREAK);
+}
+
+continue {
+		currPos += yyleng;
+		return(CONTINUE);
+}
+
+read {
+		currPos += yyleng;
+		return(READ);
+}
+
+write {
+		currPos += yyleng;
+		return(WRITE);
+}
+
+"(" {	/* Precedence 0 */
+		currPos += yyleng;
+		return(L_PAREN);
+}
+
+")" {
+		currPos += yyleng;
+		return(R_PAREN);
+}
+
+"[" {	/* Precedence 1 */
+		currPos += yyleng;\
+		return(L_SQUARE_BRACKET);
+}
+
+"]" {
+		currPos += yyleng;
+		return(R_SQUARE_BRACKET);
+}
+
+"*" {	/* Precedence 3 */
+		currPos += yyleng;
+		return(MULT);
+}
+
+"/" {
+		currPos += yyleng;
+		return(DIV);
+}
+
+"%" {
+		currPos += yyleng;
+		return(MOD);
+}
+
+"-" {	/* Precedence 4 */
+		currPos += yyleng;
+		return(SUB);
+}
+
+"+" {
+		currPos += yyleng;
+		return(ADD);
+}
+
+"==" {	/* Precedence 5 */
+		currPos += yyleng;
+		return(EQ);
+}
+
+"<>" {
+		currPos += yyleng;
+		return(NEQ);
+}
+
+"<" {
+		currPos += yyleng;
+		return(LT);
+}
+
+">" {
+		currPos += yyleng;
+		return(GT);
+}
+
+"<=" {
+		currPos += yyleng;
+		return(LTE);
+}
+
+">=" {
+		currPos += yyleng;
+		return(GTE);
+}
+
+not {	/* Precedence 6 */
+		currPos += yyleng;
+		return(NOT);
+}
+
+and {	/* Precedence 7 */
+		currPos += yyleng;
+		return(AND);
+}
+
+or {	/* Precedence 8 */
+		currPos += yyleng;
+		return(OR);
+}
+
+true {
+		currPos += yyleng;
+		return(TRUE);
+}
+
+false {
+		currPos += yyleng;
+		return(FALSE);
+}
+
+return {
+		currPos += yyleng;
+		return(RETURN);
+}
+
+";" {
+		currPos += yyleng;
+		return(SEMICOLON);
+}
+
+":" {
+		currPos += yyleng;
+		return(COLON);
+}
+
+"," {
+		currPos += yyleng;
+		return(COMMA);
+}
+
+":=" {	/* Precedence 9 */
+		currPos += yyleng;
+		return(ASSIGN);
+}
+
+[ \t]+ {
+		currPos += yyleng;
+}
+
+"\n" {
+		currLine++;
+		currPos = 1;
+}
+
+{ID} {
+		currPos += yyleng;
+		yylval.id_val = yytext;
+		return IDENT;
+}
+
+{DIGIT}+ {
+		currPos += yyleng;
+		yylval.num_val = atoi(yytext);
+		return NUMBER;
+}
+
+{UNDERSCORE} {		/* ERRORS */
+		printf("Error at line %d, column %d: identifier \"%s\" cannot end with underscore\n", currLine, currPos, yytext);
+		exit(0);		
+}
+
+{LETTER_START} {	/* ERRORS */
+		printf("Error at line %d, column %d: identifier \"%s\" must begin wtih a letter\n", currLine, currPos, yytext);
+		exit(0);
+}
+
+. {			/* ERRORS */
+		printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext);
+		exit(0);
+}
 
 %%
+
+int _main(int argc, char ** argv) {
+	yylex();
+	exit(0);
+}
