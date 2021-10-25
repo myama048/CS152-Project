@@ -14,6 +14,8 @@ extern int numcol;
 FILE *yyin;
 %}
 
+
+// Assigning value to property of yyval
 %union {
   int num_val;
   char* id_val;
@@ -23,6 +25,7 @@ FILE *yyin;
 // Define tokens
 
 %start prog_start
+// All tokens same as Phase 1
 %token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY ENUM OF IF THEN ENDIF ELSE WHILE DO BEGINLOOP ENDLOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN SUB ADD MULT DIV MOD EQ NEQ LT GT LTE GTE SEMICOLON COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN END
 
 %token <num_val> NUMBER
