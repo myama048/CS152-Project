@@ -40,7 +40,7 @@ FILE *yyin;
 
 // Grammer defined below
 %%
-prog_start: 	Functions {printf("prog_start -> Functions\n");}
+prog_start: Functions {printf("prog_start -> Functions\n");}
 	;
 Functions:  {printf("functions -> epsilon\n");}
 	| Function Functions {printf("Functions -> Function Functions\n");}
@@ -64,8 +64,8 @@ Statements: statement SEMICOLON Statements {printf("Statements -> statement SEMI
 statement: Var ASSIGN Expression {printf("statement -> Var ASSIGN Expression \n");}
 	| IF Bool_Exprs THEN Statements ENDIF {printf("statement -> IF Bool_Expr THEN Statements ENDIF \n");}
 	| IF Bool_Exprs THEN Statements ELSE Statements ENDIF {printf("statement -> IF Bool_Expr THEN Statements ELSE Statements ENDIF\n");}
-	| WHILE Bool_Exprs BEGINLOOP Statements ENDLOOP {printf("statement -> WHILE Bool_Expr BEGINLOOP Statements ENDLOOP\n");}
-	| DO BEGINLOOP Statements ENDLOOP WHILE Bool_Exprs {printf("statement -> DO BEGINLOOP Statements ENDLOOP WHILE Bool_Expr\n");}
+	| WHILE Bool_Exprs BEGIN_LOOP Statements END_LOOP {printf("statement -> WHILE Bool_Expr BEGINLOOP Statements ENDLOOP\n");}
+	| DO BEGIN_LOOP Statements END_LOOP WHILE Bool_Exprs {printf("statement -> DO BEGINLOOP Statements ENDLOOP WHILE Bool_Expr\n");}
 	| READ Vars {printf("statement -> READ Vars\n");}
 	| WRITE Vars {printf("statement -> WRITE Vars\n");}
 	| CONTINUE {printf("statement -> CONTINUE\n");}
@@ -132,6 +132,12 @@ number: NUMBER {printf("NUMBER %d \n", $1);}
 
 // Main method
 int main(int argc, char** argv) {
+  if (argc > 1) {
+     yyin = fopen(argv[1], "r");
+	if(yyin == NULL) {
+	  printf("Syntax: %s filename", argv[0]);
+	}
+   }
    yyparse();
    return 0;
 }
