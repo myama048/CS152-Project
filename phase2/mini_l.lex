@@ -75,8 +75,8 @@ error2          [a-zA-Z]([a-zA-Z|0-9|_]*[_])
 "["		printf("L_SQUARE_BRACKET\n"); numcol += yyleng; return L_SQUARE_BRACKET;
 "]"		printf("R_SQUARE_BRACKET\n"); numcol += yyleng; return R_SQUARE_BRACKET;
 ":="		printf("ASSIGN\n"); numcol += yyleng; return ASSIGN;
-{signedNatural}	printf("NUMBER %s\n", yytext); numcol += yyleng; return NUMBER;
-{identity}	printf("IDENT %s\n", yytext); numcol += yyleng; return IDENT;
+{digit}+	printf("NUMBER %s\n", yytext); numcol += yyleng; return NUMBER;
+{identity}      printf("IDENT %s\n", yytext); numcol += yyleng; yylval.id_val=yytext; return IDENT;
 .		printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", numline, numcol, yytext); return -1;
 %%
 
