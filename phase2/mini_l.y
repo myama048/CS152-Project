@@ -2,16 +2,16 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+//#include "y.tab.h"
 
 extern int yylex();
 extern int yyparse();
-extern FILE* yyin;
 
 void yyerror(const char* msg);
 
 extern int numline;
 extern int numcol;
-FILE *yyin;
+FILE *yyin;i
 %}
 
 
@@ -26,8 +26,7 @@ FILE *yyin;
 
 %start prog_start
 // All tokens same as Phase 1
-%token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY ENUM OF IF THEN ENDIF ELSE WHILE DO BEGINLOOP ENDLOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN SUB ADD MULT DIV MOD EQ NEQ LT GT LTE GTE SEMICOLON COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN END
-
+%token SEMICOLON FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY ENUM OF IF THEN ENDIF ELSE WHILE DO BEGIN_LOOP END_LOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN SUB ADD MULT DIV MOD EQ NEQ LT GT LTE GTE COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN END FOR
 %token <num_val> NUMBER
 %token <id_val> IDENT
 
@@ -42,11 +41,10 @@ FILE *yyin;
 // Grammer defined below
 %%
 
-prog_start:	functions { printf("prog_start -> functions\n");}
+prog_start:   functions { printf("prog_start -> functions\n");}
 	;
 
-functions:	/*empty*/{printf("functions -> epsilon\n");}	
-	| function {printf("functions -> function\n");}
+functions:	/*empty*/{printf("functions -> epsilon\n");}
 	| function functions {printf("functions -> function functions\n");}
 	;
 
@@ -69,9 +67,9 @@ statements:	statement SEMICOLON {printf("statements -> statement SEMICOLON\n");}
 statement:	var ASSIGN expression {printf("statement -> var ASSIGN expression\n");}
 	| IF bool_exp THEN statements ENDIF {printf("statement -> IF bool_exp THEN statements ENDIF\n");}
 	| IF bool_exp THEN statements ELSE statements ENDIF {printf("statement -> IF bool_exp THEN statements ELSE statements ENDIF\n");}
-	| WHILE bool_exp BEGINLOOP statements ENDLOOP {printf("statement -> WHILE bool_exp BEGINLOOP statements ENDLOOP\n");}
-	| DO BEGINLOOP statements ENDLOOP WHILE bool_exp {printf("statement -> DO BEGINLOOP statement_loop ENDLOOP WHILE bool_exp\n");}
-	| FOR vars ASSIGN NUMBER SEMICOLON bool_exp SEMICOLON vars ASSIGN expression BEGINLOOP statements ENDLOOP {printf("statement -> FOR vars ASSIGN NUMBER SEMICOLON bool_exp SEMICOLON vars ASSIGN expression BEGINLOOP statements ENDLOOP\n");}
+	| WHILE bool_exp BEGIN_LOOP statements END_LOOP {printf("statement -> WHILE bool_exp BEGINLOOP statements ENDLOOP\n");}
+	| DO BEGIN_LOOP statements END_LOOP WHILE bool_exp {printf("statement -> DO BEGINLOOP statement_loop ENDLOOP WHILE bool_exp\n");}
+	| FOR vars ASSIGN NUMBER SEMICOLON bool_exp SEMICOLON vars ASSIGN expression BEGIN_LOOP statements END_LOOP {printf("statement -> FOR vars ASSIGN NUMBER SEMICOLON bool_exp SEMICOLON vars ASSIGN expression BEGINLOOP statements ENDLOOP\n");}
 	| READ vars {printf("statement -> READ vars\n");}
 	| WRITE vars {printf("statement -> WRITE vars\n");}
 	| CONTINUE {printf("statement -> CONTINUE \n");}
