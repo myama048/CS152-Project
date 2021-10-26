@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 void yyerror(const char *msg);
+
 extern int numline;
 extern int numcol;
 
@@ -10,6 +11,7 @@ extern int yyparse();
 
 void yyerror(const char* msg);
 FILE * yyin;
+
 %}
 
 %union {
@@ -20,10 +22,10 @@ FILE * yyin;
 %error-verbose 
 
 %start prog_start
-%token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY ENUM OF IF THEN ENDIF ELSE WHILE DO BEGIN_LOOP END_LOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN SUB ADD MULT DIV MOD EQ NEQ LT GT LTE GTE SEMICOLON COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN END
+%token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY ENUM OF IF THEN ENDIF ELSE WHILE DO BEGIN_LOOP END_LOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN SUB ADD MULT DIV MOD EQ NEQ LT GT LTE GTE SEMICOLON COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN END NUMBER
 
-%token <num_val> NUMBER
 %token <id_val> IDENT
+%token <num_val> NUMBER
 
 %right ASSIGN
 %left OR
@@ -47,7 +49,7 @@ Declarations: declaration SEMICOLON Declarations  {printf("Declarations -> decla
 	;
 declaration: Identifiers COLON ENUM L_PAREN Identifiers R_PAREN {printf("declaration ->  Identifiers COLON ENUM L_PAREN Identifiers R_PAREN \n");}
 	| Identifiers COLON INTEGER {printf("declaration -> Identifiers COLON INTEGER\n");}
-	| Identifiers COLON ARRAY L_SQUARE_BRACKET number R_SQUARE_BRACKET OF INTEGER {printf("declaration -> Identifiers COLON ARRAY L_SQUARE_BRACKET number R_SQUARE_BRACKET OF INTEGER\n");}
+	| Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER {printf("declaration -> Identifiers COLON ARRAY L_SQUARE_BRACKET number R_SQUARE_BRACKET OF INTEGER\n");}
 	;
 Identifiers: identifier {printf("Identifiers -> identifier \n");} 
 	| identifier COMMA Identifiers {printf("Identifiers -> identifier COMMA Identifiers \n");}
@@ -109,14 +111,12 @@ Multiplicative_Expr: Term {printf("Multiplicative_Expr -> Term\n");}
 	;
 Term: Var {printf("Term -> Var\n");}
 	| SUB Var {printf("Term -> SUB Var\n");}
-	| number {printf("Term -> number \n");}
-	| SUB number {printf("Term -> SUB number\n");}
+	| NUMBER {printf("Term -> number \n");}
+	| SUB NUMBER {printf("Term -> SUB number\n");}
 	| L_PAREN Expression R_PAREN {printf("Term -> L_PAREN Expression R_PAREN\n");}
 	| SUB L_PAREN Expression R_PAREN {printf("Term -> SUB L_PAREN Expression R_PAREN\n");}
 	| identifier L_PAREN Expressions R_PAREN {printf("Term -> identifier L_PAREN Expressions R_PAREN\n");}
 	;
-number: NUMBER {printf("NUMBER %d \n", $1);}
-
 
 %%
 
