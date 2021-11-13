@@ -36,86 +36,85 @@ FILE * yyin;
 %left MULT DIV MOD
 
 %%
-prog_start: Functions {printf("prog_start -> Functions\n");}
+prog_start: Functions
 	;
-Functions:  {printf("functions -> epsilon\n");}
-	|  Function {printf("Functions -> Function\n");}
-	| Function Functions {printf("Functions -> Function Functions\n");}
+Functions: 
+	| Function
+	| Function Functions
 	; 
-Function: FUNCTION identifier SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEGIN_LOCALS Declarations END_LOCALS BEGIN_BODY Statements END_BODY {printf("Function -> FUNCTION identifier SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEGIN_LOCALS Declarations END_LOCALS BEGIN_BODY Statements END_BODY \n");}
+Function: FUNCTION identifier SEMICOLON BEGIN_PARAMS Declarations END_PARAMS BEGIN_LOCALS Declarations END_LOCALS BEGIN_BODY Statements END_BODY 
 	;
-Declarations: declaration SEMICOLON Declarations  {printf("Declarations -> declaration SEMICOLON Declarations \n");}
-	| {printf("Declarations -> epsilon \n");}
+Declarations: declaration SEMICOLON Declarations
 	;
-declaration: Identifiers COLON ENUM L_PAREN Identifiers R_PAREN {printf("declaration ->  Identifiers COLON ENUM L_PAREN Identifiers R_PAREN \n");}
-	| Identifiers COLON INTEGER {printf("declaration -> Identifiers COLON INTEGER\n");}
-	| Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER {printf("declaration -> Identifiers COLON ARRAY L_SQUARE_BRACKET number R_SQUARE_BRACKET OF INTEGER\n");}
+declaration: Identifiers COLON ENUM L_PAREN Identifiers R_PAREN
+	| Identifiers COLON INTEGER
+	| Identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
 	;
-Identifiers: identifier {printf("Identifiers -> identifier \n");} 
-	| identifier COMMA Identifiers {printf("Identifiers -> identifier COMMA Identifiers \n");}
+Identifiers: identifier
+	| identifier COMMA Identifiers
 	;
-identifier: IDENT {printf("identifier -> IDENT %s\n", $1);}
-Statements: statement SEMICOLON Statements {printf("Statements -> statement SEMICOLON Statements \n");}  
-	|   statement SEMICOLON {printf("Statements -> statement SEMICOLON \n");}
+identifier: IDENT
+Statements: statement SEMICOLON Statements
+	|   statement SEMICOLON
 	;
-statement: Var ASSIGN Expression {printf("statement -> Var ASSIGN Expression \n");}
-	| IF Bool_Expr THEN Statements ENDIF {printf("statement -> IF Bool_Expr THEN Statements ENDIF \n");}
-	| IF Bool_Expr THEN Statements ELSE Statements ENDIF {printf("statement -> IF Bool_Expr THEN Statements ELSE Statements ENDIF\n");}
-	| WHILE Bool_Expr BEGIN_LOOP Statements END_LOOP {printf("statement -> WHILE Bool_Expr BEGINLOOP Statements ENDLOOP\n");}
-	| DO BEGIN_LOOP Statements END_LOOP WHILE Bool_Expr {printf("statement -> DO BEGINLOOP Statements ENDLOOP WHILE Bool_Expr\n");}
-	| READ Vars {printf("statement -> READ Vars\n");}
-	| WRITE Vars {printf("statement -> WRITE Vars\n");}
-	| CONTINUE {printf("statement -> CONTINUE\n");}
-	| RETURN Expression {printf("statement -> RETURN Expression\n");}
+statement: Var ASSIGN Expression
+	| IF Bool_Expr THEN Statements ENDIF
+	| IF Bool_Expr THEN Statements ELSE Statements ENDIF
+	| WHILE Bool_Expr BEGIN_LOOP Statements END_LOOP
+	| DO BEGIN_LOOP Statements END_LOOP WHILE Bool_Expr
+	| READ Vars
+	| WRITE Vars
+	| CONTINUE
+	| RETURN Expression 
 	;
-Vars: Var {printf("Vars -> Var\n");}
-	| Var COMMA Vars {printf("Vars -> Var COMMA Vars");}
+Vars: Var 
+	| Var COMMA Vars
 	;
-Var: identifier {printf("Var -> identifier\n");}
-	| identifier L_SQUARE_BRACKET Expression R_SQUARE_BRACKET {printf("Var -> identifier L_SQUARE_BRACKET Expression R_SQUARE_BRACKET \n");}
+Var: identifier
+	| identifier L_SQUARE_BRACKET Expression R_SQUARE_BRACKET
 	;
-Bool_Expr: Relation_And_Expr OR Bool_Expr {printf("Bool_Expr -> Relation_And_Expr \n");} 
-	| Relation_And_Expr {printf("Relation_And_Expr\n");}
+Bool_Expr: Relation_And_Expr OR Bool_Expr
+	| Relation_And_Expr
 	;
-Relation_And_Expr: Relation_Expr AND Relation_And_Expr {printf("Relation_And_Expr AND Relation_Expr -> Relation_Expr\n");}
-	| Relation_Expr {printf("Relation_And_Expr -> Relation_Expr\n");}
+Relation_And_Expr: Relation_Expr AND Relation_And_Expr
+	| Relation_Expr
 	;
-Relation_Expr: Expression Comp Expression {printf("Relation_Expr -> Expression Comp Expression \n");}
-	| TRUE {printf("Relation_Expr -> TRUE\n");}
-	| FALSE {printf("Relation -> FALSE \n");}
-	| L_PAREN Bool_Expr R_PAREN {printf("Relation_Expr -> L_PAREN Bool_Expr R_PAREN\n");}
-	| NOT Expression Comp Expression {printf("Relation_Expr -> NOT Expression Comp Expression \n");}
-	| NOT TRUE {printf("Relation_Expr -> NOT TRUE\n");}
-	| NOT FALSE {printf("Relation -> NOT FALSE \n");}
-	| NOT L_PAREN Bool_Expr R_PAREN {printf("Relation_Expr -> NOT L_PAREN Bool_Expr R_PAREN\n");}
+Relation_Expr: Expression Comp Expression
+	| TRUE 
+	| FALSE 
+	| L_PAREN Bool_Expr R_PAREN 
+	| NOT Expression Comp Expression 
+	| NOT TRUE 
+	| NOT FALSE 
+	| NOT L_PAREN Bool_Expr R_PAREN
 	;
-Comp: EQ {printf("Comp -> EQ\n");}
-	| NEQ {printf("Comp -> NEQ\n");}
-	| LT {printf("Comp -> LT\n");}
-	| GT {printf("Comp -> GT\n");}
-	| GTE {printf("Comp -> GTE\n");}
-	| LTE {printf("Comp -> LTE\n");}
+Comp: EQ 
+	| NEQ 
+	| LT
+	| GT 
+	| GTE 
+	| LTE
 	;
-Expressions: {printf("Expressions -> epsilon\n");}
-	| Expression {printf("Expressions -> Expression\n");}
-	| Expression COMMA Expressions {printf("Expressions -> Expression COMMA Expression\n");}
+Expressions: 
+	| Expression 
+	| Expression COMMA Expressions 
 	;
-Expression: Multiplicative_Expr {printf("Expression -> Multiplicative_Expr\n");}
-	| Multiplicative_Expr ADD Expression {printf("Expression -> Multiplicative_Expr ADD Expression\n");}
-	| Multiplicative_Expr SUB Expression {printf("Expression -> Multiplicative_Expr SUB Expression\n");}
+Expression: Multiplicative_Expr 
+	| Multiplicative_Expr ADD Expression 
+	| Multiplicative_Expr SUB Expression
 	;
-Multiplicative_Expr: Term {printf("Multiplicative_Expr -> Term\n");}
-	| Term MULT Multiplicative_Expr {printf("Multiplicative_Expr -> Term MULT Multiplicative_Expr\n");}
-	| Term DIV Multiplicative_Expr {printf("Multiplicative_Expr -> Term DIV Multiplicative_Expr\n");}
-	| Term MOD Multiplicative_Expr {printf("Multiplicative_Expr -> Term MOD Multiplicative_Expr\n");}
+Multiplicative_Expr: Term 
+	| Term MULT Multiplicative_Expr
+	| Term DIV Multiplicative_Expr
+	| Term MOD Multiplicative_Expr
 	;
-Term: Var {printf("Term -> Var\n");}
-	| SUB Var {printf("Term -> SUB Var\n");}
-	| NUMBER {printf("Term -> number \n");}
-	| SUB NUMBER {printf("Term -> SUB number\n");}
-	| L_PAREN Expression R_PAREN {printf("Term -> L_PAREN Expression R_PAREN\n");}
-	| SUB L_PAREN Expression R_PAREN {printf("Term -> SUB L_PAREN Expression R_PAREN\n");}
-	| identifier L_PAREN Expressions R_PAREN {printf("Term -> identifier L_PAREN Expressions R_PAREN\n");}
+Term: Var 
+	| SUB Var 
+	| NUMBER 
+	| SUB NUMBER
+	| L_PAREN Expression R_PAREN 
+	| SUB L_PAREN Expression R_PAREN
+	| identifier L_PAREN Expressions R_PAREN
 	;
 
 %%
