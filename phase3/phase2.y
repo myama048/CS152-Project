@@ -1,7 +1,18 @@
 %{
+   // ALl includes go here
    #include<stdio.h>
-   void yyerror(const char *msg);
+   #include<stdlib.h>
+   #include<string.h>
+   #include<fstream>
+   #include<sstream>
+   #include<iterator>
+   // Call external files
+   int yyerror(const char *msg);
+   extern FILE *yyin;
+   int yylex(void)
    extern int currLine;
+   extern int currPos;
+
    int myError = 0;
    int otherError = 0;
    
@@ -9,12 +20,45 @@
    int numberToken;
    int productionID = 0;
 
+   char list_of_function_names[100][100];
+   int count_names = 0;
+
+   // To make external file
+    string outFile;
+    ofstream myFile; 
+    bool param = false;
+    int paramVal;
+    int numLabel;
+    int varNum;
+
+  template <typename T>
+  string numTostring (T Convert)
+ {
+   ostringstream ss;
+   ss << Convert;
+   return ss.str();
+ }
+
+  // Define the 
+
 //#define YYDEBUG 1
 //yydebug=1;
 %}
 
+%union {
+  char* id_val;
+  int num_val;
+}
 
-%error-verbose
+
+
+
+%define parse.error verbose
+%type <op_val> var
+%type <op_val> ident
+%type <op_val> expression
+%type <op_val> multiplicative_expression
+%type <op_val> term
 %start prog_start
 %token BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY
 %token FUNCTION RETURN MAIN
@@ -24,17 +68,19 @@
 %token IF THEN ENDIF ELSE
 %token WHILE DO BEGINLOOP ENDLOOP  CONTINUE
 %token READ WRITE
-%token AND OR NOT TRUE FALSE
-%token SUB ADD MULT DIV MOD
-%token EQ NEQ LT GT LTE GTE
-%token SEMICOLON COLON COMMA L_PAREN R_PAREN ASSIGN
-%token NUMBER IDENT
-
+%token TRUE FALSE
+%left AND OR
+%right NOT ASSIGN
+%left SUB ADD MULT DIV MOD
+%left EQ NEQ LT GT LTE GTE
+%token SEMICOLON COLON COMMA L_PAREN R_PAREN
+%token <op_val> NUMBER
+%token <op_val> IDENT
 %%
 
 prog_start: 
 	functions
-		
+	{};	
 
 functions: 
 	/* epsilon */
@@ -50,6 +96,7 @@ function:
 
 ident:
 	IDENT
+		{$$ = $1; };
 
 declarations: 
 	/* epsilon */
@@ -58,19 +105,36 @@ declarations:
 
 declaration: 
 	identifiers COLON INTEGER
+	{
+	 char *token = $1;
+	 printf(". %s\n", token);
+	}
 		
 	| identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
-		
+	{
+	char *token = $1;
+	char *index = $5;
+	print(".[] %s, %s", token, index);
+	};	
 
 identifiers: 
 	ident
 	| ident COMMA identifiers
-
+	{	
+	  
+	}
 
 statement: 
 	var ASSIGN expression
-		
+	{
+	char *dest = $1;
+	char *src = $3;
+ 	printf("= %s, %s\n", dest, src);
+	}	
 	| IF bool_exp THEN statements ENDIF
+	{
+
+	}
 		
 	| IF bool_exp THEN statements ELSE statements ENDIF
 		
@@ -79,8 +143,17 @@ statement:
 	| DO BEGINLOOP statements ENDLOOP WHILE bool_exp
 		
 	| READ vars
+	{
+	char *vars = $2;
+	printf(".< %s", vars);
+	
+	}
 		
 	| WRITE vars
+	{
+	 char *vars = $2;
+	 printf(".> %s", vars);
+	}
 		
 	| CONTINUE
 		
@@ -145,12 +218,25 @@ multiplicative_expression:
 
 term: 
 	var
+	
+	{$$ = $1;}
 		
 	| SUB var
+	{
+	char* var = $2;
+	printf("-%s", var);
+	}
 		
 	| NUMBER
+	{
+	$$ = $1;
+	}
 		
 	| SUB NUMBER
+	{
+	char* var = $2;
+
+	}
 		
 	| L_PAREN expression R_PAREN
 		
@@ -231,7 +317,9 @@ vars:
 
 int main(int argc, char **argv)
 {
-   return yyparse();
+   yyparse();
+
+   return 0;
 }
 
 void yyerror(const char *msg)

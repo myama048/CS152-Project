@@ -65,6 +65,8 @@
 #line 1 "phase2.y" /* yacc.c:339  */
 
    #include<stdio.h>
+   #include<stdlib.h>
+   #include<string.h>
    void yyerror(const char *msg);
    extern int currLine;
    int myError = 0;
@@ -74,10 +76,14 @@
    int numberToken;
    int productionID = 0;
 
+ std::set<std::string> test {"FUNCTION"};
+
+  // Define the 
+
 //#define YYDEBUG 1
 //yydebug=1;
 
-#line 81 "phase2.tab.c" /* yacc.c:339  */
+#line 87 "phase2.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -180,7 +186,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 184 "phase2.tab.c" /* yacc.c:358  */
+#line 190 "phase2.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -480,15 +486,15 @@ static const yytype_uint8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_uint16 yyrline[] =
 {
-       0,    36,    36,    39,    42,    46,    52,    54,    56,    60,
-      62,    66,    67,    71,    73,    75,    77,    79,    81,    83,
-      85,    87,    91,    93,    97,   100,   109,   119,   121,   129,
-     137,   147,   149,   151,   153,   155,   157,   159,   162,   165,
-     169,   171,   175,   177,   181,   183,   187,   189,   191,   193,
-     195,   197,   199,   201,   205,   207,   209,   211,   213,   215,
-     219,   221,   224,   226
+       0,    42,    42,    45,    48,    52,    58,    61,    63,    67,
+      73,    81,    82,    86,    92,    97,    99,   101,   103,   110,
+     116,   118,   122,   124,   128,   131,   140,   150,   152,   160,
+     168,   178,   182,   188,   193,   199,   201,   203,   206,   209,
+     213,   215,   219,   221,   225,   227,   231,   233,   235,   237,
+     239,   241,   243,   245,   249,   251,   253,   255,   257,   259,
+     263,   265,   268,   270
 };
 #endif
 
@@ -1353,14 +1359,76 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 24:
-#line 98 "phase2.y" /* yacc.c:1646  */
+        case 6:
+#line 59 "phase2.y" /* yacc.c:1646  */
     {(yyval) = (yyvsp[0]); }
-#line 1360 "phase2.tab.c" /* yacc.c:1646  */
+#line 1366 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 9:
+#line 68 "phase2.y" /* yacc.c:1646  */
+    {
+	 char *token = (yyvsp[-2]);
+	 printf(". %s\n", token);
+	}
+#line 1375 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 10:
+#line 74 "phase2.y" /* yacc.c:1646  */
+    {
+	char *token = (yyvsp[-7]);
+	char *index = (yyvsp[-3]);
+	print(".[] %s, %s", token, index);
+	}
+#line 1385 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 13:
+#line 87 "phase2.y" /* yacc.c:1646  */
+    {
+	char *dest = (yyvsp[-2]);
+	char *src = (yyvsp[0]);
+ 	printf("= %s, %s\n", dest, src);
+	}
+#line 1395 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 14:
+#line 93 "phase2.y" /* yacc.c:1646  */
+    {
+
+	}
+#line 1403 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 18:
+#line 104 "phase2.y" /* yacc.c:1646  */
+    {
+	char *vars = (yyvsp[0]);
+	printf(".< %s", vars);
+	
+	}
+#line 1413 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 19:
+#line 111 "phase2.y" /* yacc.c:1646  */
+    {
+	 char *vars = (yyvsp[0]);
+	 printf(".> %s", vars);
+	}
+#line 1422 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 24:
+#line 129 "phase2.y" /* yacc.c:1646  */
+    {(yyval) = (yyvsp[0]); }
+#line 1428 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 101 "phase2.y" /* yacc.c:1646  */
+#line 132 "phase2.y" /* yacc.c:1646  */
     {
 	char *src1 = (yyvsp[-2]);
 	char *src2 = (yyvsp[0]);
@@ -1368,11 +1436,11 @@ yyreduce:
 	printf("+ %s, %s, %s\n", dest, src1, src2);
 	(yyval) = dest;
 	}
-#line 1372 "phase2.tab.c" /* yacc.c:1646  */
+#line 1440 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 110 "phase2.y" /* yacc.c:1646  */
+#line 141 "phase2.y" /* yacc.c:1646  */
     {
 	char *src1 = (yyvsp[-2]);
 	char *src2 = (yyvsp[0]);
@@ -1380,17 +1448,17 @@ yyreduce:
 	printf("- %s, %s, %s\n", dest, src1, src2);
 	(yyval) = dest;
 	}
-#line 1384 "phase2.tab.c" /* yacc.c:1646  */
+#line 1452 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 120 "phase2.y" /* yacc.c:1646  */
+#line 151 "phase2.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]);}
-#line 1390 "phase2.tab.c" /* yacc.c:1646  */
+#line 1458 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 122 "phase2.y" /* yacc.c:1646  */
+#line 153 "phase2.y" /* yacc.c:1646  */
     { 
 		char *src1 = (yyvsp[-2]);
 		char *src2 = (yyvsp[0]);
@@ -1398,11 +1466,11 @@ yyreduce:
 		printf("* %s, %s, %s\n", dest, src1, src2);
 		(yyval) = dest;
 		}
-#line 1402 "phase2.tab.c" /* yacc.c:1646  */
+#line 1470 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 130 "phase2.y" /* yacc.c:1646  */
+#line 161 "phase2.y" /* yacc.c:1646  */
     {
 		char *src1 = (yyvsp[-2]);
 		char *src2 = (yyvsp[0]);
@@ -1410,11 +1478,11 @@ yyreduce:
 		printf("/ %s, %s, %s\n", dest, src1, src2);
 		(yyval) = dest;
 		}
-#line 1414 "phase2.tab.c" /* yacc.c:1646  */
+#line 1482 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 138 "phase2.y" /* yacc.c:1646  */
+#line 169 "phase2.y" /* yacc.c:1646  */
     {
 		char *src1 = (yyvsp[-2]);
 		char *src2 = (yyvsp[0]);
@@ -1422,11 +1490,43 @@ yyreduce:
 		printf(" / %s, %s, %s\n", dest, src1, src2);
 		(yyval) = dest;
 		}
-#line 1426 "phase2.tab.c" /* yacc.c:1646  */
+#line 1494 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 31:
+#line 180 "phase2.y" /* yacc.c:1646  */
+    {(yyval) = (yyvsp[0]);}
+#line 1500 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 32:
+#line 183 "phase2.y" /* yacc.c:1646  */
+    {
+	char* var = (yyvsp[0]);
+	printf("-%s", var);
+	}
+#line 1509 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 33:
+#line 189 "phase2.y" /* yacc.c:1646  */
+    {
+	(yyval) = (yyvsp[0]);
+	}
+#line 1517 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 34:
+#line 194 "phase2.y" /* yacc.c:1646  */
+    {
+	char* var = (yyvsp[0]);
+
+	}
+#line 1526 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1430 "phase2.tab.c" /* yacc.c:1646  */
+#line 1530 "phase2.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1654,7 +1754,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 230 "phase2.y" /* yacc.c:1906  */
+#line 274 "phase2.y" /* yacc.c:1906  */
 
 
 int main(int argc, char **argv)
