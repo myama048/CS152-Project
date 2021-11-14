@@ -1,8 +1,9 @@
-parse: mini_l.lex mini_l.y
-	bison -v -d --file-prefix=y mini_l.y
-	flex mini_l.lex
-	gcc -o parser y.tab.c lex.yy.c -lfl y.tab.h
-test:
-	cat mytest.min | parser
+all: phase2
+phase2.tab.c phase2.tab.h:	phase2.y
+	bison -t -v -d phase2.y
+lex.yy.c: phase2.lex phase2.tab.h
+	flex phase2.lex 
+phase2: lex.yy.c phase2.tab.c phase2.tab.h
+	gcc -o phase2 phase2.tab.c lex.yy.c
 clean:
-	rm -f lex.yy.c y.tab.* y.output *.o parser
+	rm phase2 phase2.tab.c lex.yy.c phase2.tab.h phase2.output
