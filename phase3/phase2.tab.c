@@ -482,13 +482,13 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    36,    36,    41,    42,    46,    53,    58,    59,    63,
-      65,    69,    71,    76,    78,    80,    82,    84,    86,    88,
-      90,    92,    96,    98,   102,   104,   106,   110,   112,   114,
-     116,   120,   122,   124,   126,   128,   130,   132,   137,   138,
-     142,   144,   148,   150,   154,   156,   160,   162,   164,   166,
-     168,   170,   172,   174,   178,   180,   182,   184,   186,   188,
-     192,   194,   197,   199
+       0,    36,    36,    39,    42,    46,    52,    54,    56,    60,
+      62,    66,    67,    71,    73,    75,    77,    79,    81,    83,
+      85,    87,    91,    93,    97,   100,   109,   119,   121,   129,
+     137,   147,   149,   151,   153,   155,   157,   159,   162,   165,
+     169,   171,   175,   177,   181,   183,   187,   189,   191,   193,
+     195,   197,   199,   201,   205,   207,   209,   211,   213,   215,
+     219,   221,   224,   226
 };
 #endif
 
@@ -1353,380 +1353,80 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 2:
-#line 37 "phase2.y" /* yacc.c:1646  */
-    {printf("prog_start -> functions\n");}
+        case 24:
+#line 98 "phase2.y" /* yacc.c:1646  */
+    {(yyval) = (yyvsp[0]); }
 #line 1360 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 3:
-#line 41 "phase2.y" /* yacc.c:1646  */
-    {printf("functions -> epsilon\n");}
-#line 1366 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 4:
-#line 43 "phase2.y" /* yacc.c:1646  */
-    {printf("functions -> function functions\n");}
+  case 25:
+#line 101 "phase2.y" /* yacc.c:1646  */
+    {
+	char *src1 = (yyvsp[-2]);
+	char *src2 = (yyvsp[0]);
+	char *dest = "_temp";
+	printf("+ %s, %s, %s\n", dest, src1, src2);
+	(yyval) = dest;
+	}
 #line 1372 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 5:
-#line 50 "phase2.y" /* yacc.c:1646  */
-    {printf("function -> FUNCTION IDENT SEMICOLON BEGIN_PARAMS declarations END_PARAMS BEGIN_LOCALS declarations END_LOCALS BEGIN_BODY statements END_BODY\n", identToken);}
-#line 1378 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 6:
-#line 54 "phase2.y" /* yacc.c:1646  */
-    {printf("ident -> IDENT %s\n", identToken);}
+  case 26:
+#line 110 "phase2.y" /* yacc.c:1646  */
+    {
+	char *src1 = (yyvsp[-2]);
+	char *src2 = (yyvsp[0]);
+	char *dest = "_temp";
+	printf("- %s, %s, %s\n", dest, src1, src2);
+	(yyval) = dest;
+	}
 #line 1384 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 7:
-#line 58 "phase2.y" /* yacc.c:1646  */
-    {printf("declarations -> epsilon\n");}
+  case 27:
+#line 120 "phase2.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]);}
 #line 1390 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 8:
-#line 60 "phase2.y" /* yacc.c:1646  */
-    {printf("declarations -> declaration SEMICOLON declarations\n");}
-#line 1396 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 9:
-#line 64 "phase2.y" /* yacc.c:1646  */
-    {printf("declaration -> identifiers COLON INTEGER\n");}
+  case 28:
+#line 122 "phase2.y" /* yacc.c:1646  */
+    { 
+		char *src1 = (yyvsp[-2]);
+		char *src2 = (yyvsp[0]);
+		char *dest = "_temp";
+		printf("* %s, %s, %s\n", dest, src1, src2);
+		(yyval) = dest;
+		}
 #line 1402 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 10:
-#line 66 "phase2.y" /* yacc.c:1646  */
-    {printf("declaration -> identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER\n");}
-#line 1408 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 11:
-#line 70 "phase2.y" /* yacc.c:1646  */
-    {printf("identifiers -> ident\n");}
+  case 29:
+#line 130 "phase2.y" /* yacc.c:1646  */
+    {
+		char *src1 = (yyvsp[-2]);
+		char *src2 = (yyvsp[0]);
+		char *dest = "_temp";
+		printf("/ %s, %s, %s\n", dest, src1, src2);
+		(yyval) = dest;
+		}
 #line 1414 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 12:
-#line 72 "phase2.y" /* yacc.c:1646  */
-    {printf("identifiers -> ident COMMA identifiers\n", identToken);}
-#line 1420 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 13:
-#line 77 "phase2.y" /* yacc.c:1646  */
-    {printf("statement -> var ASSIGN expression\n");}
+  case 30:
+#line 138 "phase2.y" /* yacc.c:1646  */
+    {
+		char *src1 = (yyvsp[-2]);
+		char *src2 = (yyvsp[0]);
+		char *dest = "_temp";
+		printf(" / %s, %s, %s\n", dest, src1, src2);
+		(yyval) = dest;
+		}
 #line 1426 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 14:
-#line 79 "phase2.y" /* yacc.c:1646  */
-    {printf("statement -> IF bool_exp THEN statements ENDIF\n");}
-#line 1432 "phase2.tab.c" /* yacc.c:1646  */
-    break;
 
-  case 15:
-#line 81 "phase2.y" /* yacc.c:1646  */
-    {printf("statement -> IF bool_exp THEN statements ELSE statements ENDIF\n");}
-#line 1438 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 16:
-#line 83 "phase2.y" /* yacc.c:1646  */
-    {printf("statement -> WHILE bool_exp BEGINLOOP statements ENDLOOP\n");}
-#line 1444 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 17:
-#line 85 "phase2.y" /* yacc.c:1646  */
-    {printf("statement -> DO BEGINLOOP statements ENDLOOP WHILE bool_exp\n");}
-#line 1450 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 18:
-#line 87 "phase2.y" /* yacc.c:1646  */
-    {printf("statement -> READ vars\n");}
-#line 1456 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 19:
-#line 89 "phase2.y" /* yacc.c:1646  */
-    {printf("statement -> WRITE vars\n");}
-#line 1462 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 20:
-#line 91 "phase2.y" /* yacc.c:1646  */
-    {printf("statement -> CONTINUE\n");}
-#line 1468 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 21:
-#line 93 "phase2.y" /* yacc.c:1646  */
-    {printf("statement -> RETURN expression\n");}
-#line 1474 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 22:
-#line 97 "phase2.y" /* yacc.c:1646  */
-    {printf("statements -> epsilon\n");}
-#line 1480 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 23:
-#line 99 "phase2.y" /* yacc.c:1646  */
-    {printf("statements -> statement SEMICOLON statements\n");}
-#line 1486 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 24:
-#line 103 "phase2.y" /* yacc.c:1646  */
-    {printf("expression -> multiplicative_expression\n");}
-#line 1492 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 25:
-#line 105 "phase2.y" /* yacc.c:1646  */
-    {printf("expression -> multiplicative_expression ADD multiplicative_expression\n");}
-#line 1498 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 26:
-#line 107 "phase2.y" /* yacc.c:1646  */
-    {printf("expression -> multiplicative_expression SUB multiplicative_expression\n");}
-#line 1504 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 27:
-#line 111 "phase2.y" /* yacc.c:1646  */
-    {printf("multiplicative_expression -> term\n");}
-#line 1510 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 28:
-#line 113 "phase2.y" /* yacc.c:1646  */
-    {printf("multiplicative_expression -> term MULT multiplicative_expression\n");}
-#line 1516 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 29:
-#line 115 "phase2.y" /* yacc.c:1646  */
-    {printf("multiplicative_expression -> term DIV multiplicative_expression\n");}
-#line 1522 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 30:
-#line 117 "phase2.y" /* yacc.c:1646  */
-    {printf("multiplicative_expression -> term MOD multiplicative_expression\n");}
-#line 1528 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 31:
-#line 121 "phase2.y" /* yacc.c:1646  */
-    {printf("term -> var\n");}
-#line 1534 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 32:
-#line 123 "phase2.y" /* yacc.c:1646  */
-    {printf("term -> SUB var\n");}
-#line 1540 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 33:
-#line 125 "phase2.y" /* yacc.c:1646  */
-    {printf("term -> NUMBER\n");}
-#line 1546 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 34:
-#line 127 "phase2.y" /* yacc.c:1646  */
-    {printf("term -> SUB NUMBER\n");}
-#line 1552 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 35:
-#line 129 "phase2.y" /* yacc.c:1646  */
-    {printf("term -> L_PAREN expression R_PAREN\n");}
-#line 1558 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 36:
-#line 131 "phase2.y" /* yacc.c:1646  */
-    {printf("term -> SUB L_PAREN expression R_PAREN\n");}
-#line 1564 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 37:
-#line 133 "phase2.y" /* yacc.c:1646  */
-    {printf("term -> ident L_PAREN expressions R_PAREN\n");}
-#line 1570 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 38:
-#line 137 "phase2.y" /* yacc.c:1646  */
-    {printf("expressions -> epsilon\n");}
-#line 1576 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 39:
-#line 139 "phase2.y" /* yacc.c:1646  */
-    {printf("expressions -> comma_sep_expressions\n");}
-#line 1582 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 40:
-#line 143 "phase2.y" /* yacc.c:1646  */
-    {printf("comma_sep_expressions -> expression\n");}
-#line 1588 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 41:
-#line 145 "phase2.y" /* yacc.c:1646  */
-    {printf("comma_sep_expressions -> expression COMMA comma_sep_expressions\n");}
-#line 1594 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 42:
-#line 149 "phase2.y" /* yacc.c:1646  */
-    {printf("bool_exp -> relation_and_exp\n");}
-#line 1600 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 43:
-#line 151 "phase2.y" /* yacc.c:1646  */
-    {printf("bool_exp -> relation_and_exp OR relation_and_exp\n");}
-#line 1606 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 44:
-#line 155 "phase2.y" /* yacc.c:1646  */
-    {printf("relation_and_exp -> relation_exp\n");}
-#line 1612 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 45:
-#line 157 "phase2.y" /* yacc.c:1646  */
-    {printf("relation_and_exp -> relation_exp AND relation_exp\n");}
-#line 1618 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 46:
-#line 161 "phase2.y" /* yacc.c:1646  */
-    {printf("relation_exp -> expression comp expression\n");}
-#line 1624 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 47:
-#line 163 "phase2.y" /* yacc.c:1646  */
-    {printf("relation_exp -> NOT expression comp expression\n");}
-#line 1630 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 48:
-#line 165 "phase2.y" /* yacc.c:1646  */
-    {printf("relation_exp -> TRUE\n");}
-#line 1636 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 49:
-#line 167 "phase2.y" /* yacc.c:1646  */
-    {printf("relation_exp -> NOT TRUE\n");}
-#line 1642 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 50:
-#line 169 "phase2.y" /* yacc.c:1646  */
-    {printf("relation_exp -> FALSE\n");}
-#line 1648 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 51:
-#line 171 "phase2.y" /* yacc.c:1646  */
-    {printf("relation_exp -> NOT FALSE\n");}
-#line 1654 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 52:
-#line 173 "phase2.y" /* yacc.c:1646  */
-    {printf("relation_exp -> L_PAREN bool_exp R_PAREN\n");}
-#line 1660 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 53:
-#line 175 "phase2.y" /* yacc.c:1646  */
-    {printf("relation_exp -> NOT L_PAREN bool_exp R_PAREN\n");}
-#line 1666 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 54:
-#line 179 "phase2.y" /* yacc.c:1646  */
-    {printf("comp -> EQ\n");}
-#line 1672 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 55:
-#line 181 "phase2.y" /* yacc.c:1646  */
-    {printf("comp -> NEQ\n");}
-#line 1678 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 56:
-#line 183 "phase2.y" /* yacc.c:1646  */
-    {printf("comp -> LT\n");}
-#line 1684 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 57:
-#line 185 "phase2.y" /* yacc.c:1646  */
-    {printf("comp -> GT\n");}
-#line 1690 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 58:
-#line 187 "phase2.y" /* yacc.c:1646  */
-    {printf("comp -> LTE\n");}
-#line 1696 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 59:
-#line 189 "phase2.y" /* yacc.c:1646  */
-    {printf("comp -> GTE\n");}
-#line 1702 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 60:
-#line 193 "phase2.y" /* yacc.c:1646  */
-    {printf("var -> ident\n");}
-#line 1708 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 61:
-#line 195 "phase2.y" /* yacc.c:1646  */
-    {printf("var -> ident L_SQUARE_BRACKET expression R_SQUARE_BRACKET\n");}
-#line 1714 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 62:
-#line 198 "phase2.y" /* yacc.c:1646  */
-    {printf("vars -> var\n");}
-#line 1720 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 63:
-#line 200 "phase2.y" /* yacc.c:1646  */
-    {printf("vars -> var COMMA vars\n");}
-#line 1726 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-
-#line 1730 "phase2.tab.c" /* yacc.c:1646  */
+#line 1430 "phase2.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1954,7 +1654,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 203 "phase2.y" /* yacc.c:1906  */
+#line 230 "phase2.y" /* yacc.c:1906  */
 
 
 int main(int argc, char **argv)
