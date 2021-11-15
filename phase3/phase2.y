@@ -2,14 +2,15 @@
    // ALl includes go here
    #include<stdio.h>
    #include<stdlib.h>
+   #include<stdbool.h>
    #include<string.h>
-   //#include<iterator>
+ 
    // Call external files
-   int yyerror(const char *msg);
-   extern FILE *yyin;
-   int yylex(void)
+   void yyerror(const char *msg);
+   //extern FILE *yyin;
+  // int yylex(void)
    extern int currLine;
-   extern int currPos;
+   //extern int currPos;
 
    int myError = 0;
    int otherError = 0;
@@ -22,12 +23,12 @@
    int count_names = 0;
 
    // To make external file
-    string outFile;
-    ofstream myFile; 
-    bool param = false;
-    int paramVal;
-    int numLabel;
-    int varNum;
+    //string outFile;
+    //ofstream myFile; 
+    //bool param = false;
+    //int paramVal;
+    //int numLabel;
+    //int varNum;
 
    // Global Variables
     int count = 0;
@@ -39,13 +40,13 @@
     char string_var[100][20];
     char index_var = 0;
 
-  template <typename T>
-  string numTostring (T Convert)
- {
-   ostringstream ss;
-   ss << Convert;
-   return ss.str();
- }
+  //template <typename T>
+  //string numTostring (T Convert)
+ //{
+   //ostringstream ss;
+   //ss << Convert;
+  // return ss.str();
+// }
 
   // Define the 
 
@@ -56,6 +57,7 @@
 %union {
   char* id_val;
   int num_val;
+  char *op_val;
 }
 
 
@@ -114,7 +116,8 @@ declaration:
 	{
 	//char *token = $1;
 	 //printf(". %s\n", token);
-	for(int i = 0; i < index_ident; i++){
+	int i;
+	for(i = 0; i < index_ident; i++){
 		printf(". %s\n", string[i]);
 	}
 	index_ident = 0;
@@ -125,7 +128,8 @@ declaration:
 	//char *token = $1;
 	//char *index = $5;
 	//print(".[] %s, %s", token, index);
-	for(int i = 0; i < index_ident; i++){
+	int i;
+	for(i = 0; i < index_ident; i++){
 		printf(".[] %s, %s\n", string[i], $5);
 	}
 	index_ident = 0;
@@ -149,7 +153,7 @@ statement:
 	{
 	char* dest = $1;
 	char* idx = $3;
-	char* src = $6
+	char* src = $6;
 	printf("[]= %s, %s, %s\n", dest, idx, src);
 	}
 
@@ -175,7 +179,8 @@ statement:
 	{
 	//char *vars = $2;
 	//printf(".< %s", vars);
-	for(int i = 0; i < index_var; i++){
+	int i;
+	for(i = 0; i < index_var; i++){
 		printf(".< %s\n", string_var[i]);
 	}	
 	}
@@ -184,7 +189,8 @@ statement:
 	{
 	 //char *vars = $2;
 	 //printf(".> %s", vars);
-	for(int i = 0; i < index_var; i++){
+	int i;
+	for(i = 0; i < index_var; i++){
 		printf(".> %s\n", string_var[i]);
 	}
 	}
@@ -270,7 +276,7 @@ term:
 	| ident {} L_PAREN expressions R_PAREN 
 	{ // 
            char* buffer = malloc(sizeof(char) * 20);
-           sprintf(buffer "%s%d", "temp", count);
+           sprintf("buffer %s%d", "temp", count);
            $$ = buffer;
 	   char* name = $1;
    	   printf("call %s, %s\n", name, buffer); 
