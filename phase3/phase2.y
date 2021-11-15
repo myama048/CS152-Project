@@ -88,12 +88,13 @@
 
 prog_start: 
 	functions
-	{};	
-
+	{printf("Hello\n");}	
+	| functions prog_start{}
 functions: 
 	/* epsilon */
 		
 	| function functions
+	{printf("Hello2\n");}
 		
 
 function: 
@@ -104,7 +105,7 @@ function:
 
 ident:
 	IDENT
-		{$$ = $1; };
+		{$$ = $1; }
 
 declarations: 
 	/* epsilon */
@@ -133,7 +134,7 @@ declaration:
 		printf(".[] %s, %s\n", string[i], $5);
 	}
 	index_ident = 0;
-	};	
+	}	
 
 identifiers: 
 	ident
@@ -226,7 +227,7 @@ expression:
 	char *dest = "_temp";
 	printf("- %s, %s, %s\n", dest, src1, src2);
 	$$ = dest;
-	};
+	}
 
 multiplicative_expression: 
 	term
@@ -276,7 +277,7 @@ term:
 	| ident {} L_PAREN expressions R_PAREN 
 	{ // 
            char* buffer = malloc(sizeof(char) * 20);
-           sprintf("buffer %s%d", "temp", count);
+           sprintf("buffer %s%d", "temp", count++);
            $$ = buffer;
 	   char* name = $1;
    	   printf("call %s, %s\n", name, buffer); 
@@ -367,12 +368,12 @@ var:
 vars:
 	var
 	{
-	strcpy(string_var[index_var], $1);
+	strcpy(string_var[index_var-1], $1);
 	index_var += 1;
 	}	
 	| var COMMA vars
 	{
-	strcpy(string_var[index_var], $1);
+	strcpy(string_var[index_var-1], $1);
 	index_var += 1;
 	}
 		
@@ -383,7 +384,6 @@ vars:
 int main(int argc, char **argv)
 {
    yyparse();
-
    return 0;
 }
 
