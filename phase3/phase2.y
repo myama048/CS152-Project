@@ -31,6 +31,11 @@
     int numLabel;
     int varNum;
 
+   // Global Variables
+    int count = 0;
+    int expressionCount = 0;
+    bool read_bool = false;
+
   template <typename T>
   string numTostring (T Convert)
  {
@@ -49,8 +54,6 @@
   char* id_val;
   int num_val;
 }
-
-
 
 
 %define parse.error verbose
@@ -125,11 +128,12 @@ identifiers:
 	}
 
 statement: 
-	var ASSIGN expression
+	var{read_bool = true;} ASSIGN {read_bool = false;} expression
 	{
 	char *dest = $1;
 	char *src = $3;
  	printf("= %s, %s\n", dest, src);
+        
 	}	
 	| IF bool_exp THEN statements ENDIF
 	{
@@ -218,31 +222,29 @@ multiplicative_expression:
 
 term: 
 	var
-	
 	{$$ = $1;}
 		
 	| SUB var
-	{
-	char* var = $2;
-	printf("-%s", var);
-	}
 		
 	| NUMBER
-	{
-	$$ = $1;
-	}
-		
-	| SUB NUMBER
-	{
-	char* var = $2;
-
-	}
-		
+	{$$ = $1;}
+        | SUB NUMBER
+			
 	| L_PAREN expression R_PAREN
+	{
+	$$ = $2;
+	}
 		
 	| SUB L_PAREN expression R_PAREN
 		
-	| ident L_PAREN expressions R_PAREN
+	| ident {} L_PAREN expressions R_PAREN 
+	{ // 
+           char* buffer = malloc(sizeof(char) * 20);
+           sprintf(buffer "%s%d", "temp", count);
+           $$ = buffer;
+	   char* name = $1;
+   	   printf("call %s, %s\n", name, buffer); 
+	}
 		
 
 expressions: 
@@ -252,9 +254,16 @@ expressions:
 		
 
 comma_sep_expressions: 
-	expression
+	expression 
+	{
+	  
+	  printf("param %s\n", $1);
+	}
 		
-	| expression COMMA comma_sep_expressions
+	| expression COMMA comma_sep_expressions 
+	{
+	 printf("");  
+	}
 		
 
 bool_exp:
@@ -302,9 +311,13 @@ comp:
 		
 
 var: 
-	ident
+	ident 
+	{$$ = $1;}
 		
 	| ident L_SQUARE_BRACKET expression R_SQUARE_BRACKET
+	{
+	printf("ident %s\n", $1);
+	}
 		
 vars:
 	var
