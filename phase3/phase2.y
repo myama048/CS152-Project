@@ -3,9 +3,7 @@
    #include<stdio.h>
    #include<stdlib.h>
    #include<string.h>
-   #include<fstream>
-   #include<sstream>
-   #include<iterator>
+   //#include<iterator>
    // Call external files
    int yyerror(const char *msg);
    extern FILE *yyin;
@@ -35,6 +33,11 @@
     int count = 0;
     int expressionCount = 0;
     bool read_bool = false;
+    bool is_array = false;
+    char string[100][20];
+    char index_ident = 0;
+    char string_var[100][20];
+    char index_var = 0;
 
   template <typename T>
   string numTostring (T Convert)
@@ -109,32 +112,54 @@ declarations:
 declaration: 
 	identifiers COLON INTEGER
 	{
-	 char *token = $1;
-	 printf(". %s\n", token);
+	//char *token = $1;
+	 //printf(". %s\n", token);
+	for(int i = 0; i < index_ident; i++){
+		printf(". %s\n", string[i]);
+	}
+	index_ident = 0;
 	}
 		
 	| identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
 	{
-	char *token = $1;
-	char *index = $5;
-	print(".[] %s, %s", token, index);
+	//char *token = $1;
+	//char *index = $5;
+	//print(".[] %s, %s", token, index);
+	for(int i = 0; i < index_ident; i++){
+		printf(".[] %s, %s\n", string[i], $5);
+	}
+	index_ident = 0;
 	};	
 
 identifiers: 
 	ident
-	| ident COMMA identifiers
-	{	
-	  
+	{
+	strcpy(string[index_ident], $1);
+	index_ident += 1;
 	}
 
-statement: 
-	var{read_bool = true;} ASSIGN {read_bool = false;} expression
+	| ident COMMA identifiers
+	{	
+	strcpy(string[index_ident], $1);
+	index_ident += 1;		  
+	}
+
+statement:
+	ident L_SQUARE_BRACKET expression R_SQUARE_BRACKET ASSIGN expression
 	{
-	char *dest = $1;
-	char *src = $3;
- 	printf("= %s, %s\n", dest, src);
-        
-	}	
+	char* dest = $1;
+	char* idx = $3;
+	char* src = $6
+	printf("[]= %s, %s, %s\n", dest, idx, src);
+	}
+
+	| ident ASSIGN expression
+	{
+	char* dest = $1;
+	char* src = $3; 
+	printf("= %s, %s\n", dest, src);
+	}
+ 
 	| IF bool_exp THEN statements ENDIF
 	{
 
@@ -148,15 +173,20 @@ statement:
 		
 	| READ vars
 	{
-	char *vars = $2;
-	printf(".< %s", vars);
-	
+	//char *vars = $2;
+	//printf(".< %s", vars);
+	for(int i = 0; i < index_var; i++){
+		printf(".< %s\n", string_var[i]);
+	}	
 	}
 		
 	| WRITE vars
 	{
-	 char *vars = $2;
-	 printf(".> %s", vars);
+	 //char *vars = $2;
+	 //printf(".> %s", vars);
+	for(int i = 0; i < index_var; i++){
+		printf(".> %s\n", string_var[i]);
+	}
 	}
 		
 	| CONTINUE
@@ -312,17 +342,33 @@ comp:
 
 var: 
 	ident 
-	{$$ = $1;}
-		
+	{$$ = $1;
+	//is_array = false;
+	}
+			
 	| ident L_SQUARE_BRACKET expression R_SQUARE_BRACKET
-	{
-	printf("ident %s\n", $1);
+	{ // a = b[2]
+	//printf("ident %s\n", $1);
+	//is_array = true;
+	char* dst = malloc(sizeof(char) * 20);
+	sprintf(dst, "%s%d", "temp", count++);
+	$$ = dst;
+	char* src = $1;
+	char* idx = $3;
+	printf("=[] %s, %s, %s", dst, src, idx);
 	}
 		
 vars:
 	var
-	
+	{
+	strcpy(string_var[index_var], $1);
+	index_var += 1;
+	}	
 	| var COMMA vars
+	{
+	strcpy(string_var[index_var], $1);
+	index_var += 1;
+	}
 		
 	
 

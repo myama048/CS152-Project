@@ -70,28 +70,28 @@ extern int yydebug;
     CONTINUE = 280,
     READ = 281,
     WRITE = 282,
-    AND = 283,
-    OR = 284,
-    NOT = 285,
-    TRUE = 286,
-    FALSE = 287,
-    SUB = 288,
-    ADD = 289,
-    MULT = 290,
-    DIV = 291,
-    MOD = 292,
-    EQ = 293,
-    NEQ = 294,
-    LT = 295,
-    GT = 296,
-    LTE = 297,
-    GTE = 298,
-    SEMICOLON = 299,
-    COLON = 300,
-    COMMA = 301,
-    L_PAREN = 302,
-    R_PAREN = 303,
-    ASSIGN = 304,
+    TRUE = 283,
+    FALSE = 284,
+    AND = 285,
+    OR = 286,
+    NOT = 287,
+    ASSIGN = 288,
+    SUB = 289,
+    ADD = 290,
+    MULT = 291,
+    DIV = 292,
+    MOD = 293,
+    EQ = 294,
+    NEQ = 295,
+    LT = 296,
+    GT = 297,
+    LTE = 298,
+    GTE = 299,
+    SEMICOLON = 300,
+    COLON = 301,
+    COMMA = 302,
+    L_PAREN = 303,
+    R_PAREN = 304,
     NUMBER = 305,
     IDENT = 306
   };
@@ -99,7 +99,18 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 56 "phase2.y" /* yacc.c:1909  */
+
+  char* id_val;
+  int num_val;
+
+#line 111 "phase2.tab.h" /* yacc.c:1909  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
