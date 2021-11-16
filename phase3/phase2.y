@@ -19,7 +19,7 @@
    int numberToken;
    int productionID = 0;
 
-   char list_of_function_names[100][100];
+   char list_of_function_names[100][100] = {'\0'};
    int count_names = 0;
 
    // To make external file
@@ -35,27 +35,16 @@
     int expressionCount = 0;
     bool read_bool = false;
     bool is_array = false;
-    char string[100][20];
-    char index_ident = 0;
-    char string_var[100][20];
-    char index_var = 0;
-
-  //template <typename T>
-  //string numTostring (T Convert)
- //{
-   //ostringstream ss;
-   //ss << Convert;
-  // return ss.str();
-// }
-
-  // Define the 
+    char string[1000][200] = {'\0'};
+    int index_ident = 0;
+    char string_var[100][20] = {'\0'};
+    int index_var = 0;
 
 //#define YYDEBUG 1
 //yydebug=1;
 %}
 
 %union {
-  char* id_val;
   int num_val;
   char *op_val;
 }
@@ -82,24 +71,27 @@
 %left SUB ADD MULT DIV MOD
 %left EQ NEQ LT GT LTE GTE
 %token SEMICOLON COLON COMMA L_PAREN R_PAREN
-%token <op_val> NUMBER
+%token <num_val> NUMBER
 %token <op_val> IDENT
 %%
 
 prog_start: 
-	functions
-	{printf("Hello\n");}	
-	| functions prog_start{}
+	functions 
+	{
+		
+	}	
+	| functions prog_start
 functions: 
 	/* epsilon */
 		
 	| function functions
-	{printf("Hello2\n");}
 		
 
 function: 
-	FUNCTION ident SEMICOLON
-	{printf("Hello3\n");}
+	FUNCTION ident SEMICOLON 
+	{
+	   printf("func %s\n", $2);
+	}
 	BEGIN_PARAMS declarations END_PARAMS
 	BEGIN_LOCALS declarations END_LOCALS
 	BEGIN_BODY statements END_BODY
@@ -118,12 +110,11 @@ declaration:
 	{
 	//char *token = $1;
 	 //printf(". %s\n", token);
-	printf("Hellodec\n");
 	int i;
 	for(i = 0; i < index_ident; i++){
 		printf(". %s\n", string[i]);
 	}
-	index_ident = 0;
+	 index_ident = 0;
 	}
 		
 	| identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
@@ -141,15 +132,15 @@ declaration:
 identifiers: 
 	ident
 	{
-	//strcpy(string[index_ident], $1);
-	printf(string[index_ident], $1);
+        //strcpy(string_var[index_ident], 'x');
+	//printf(string[index_ident], $1);
 	index_ident += 1;
 	}
 
 	| ident COMMA identifiers
 	{	
-	//strcpy(string[index_ident], $1);
-	printf(string[index_ident], $1);
+	//strcpy(string_var[index_ident], 'x');
+	//printf(string[index_ident], $1);
 	index_ident += 1;		  
 	}
 
@@ -267,7 +258,7 @@ term:
 		
 		
 	| NUMBER
-	{$$ = $1;}
+	{$$ = &($1);}
 			
 	| L_PAREN expression R_PAREN
 	{
@@ -383,9 +374,7 @@ vars:
 
 int main(int argc, char **argv)
 {
-   printf("Hello\n");
    yyparse();
-   printf("Hello2\n");
    return 0;
 }
 

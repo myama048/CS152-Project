@@ -102,13 +102,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 57 "phase2.y" /* yacc.c:1909  */
+#line 47 "phase2.y" /* yacc.c:1909  */
 
-  char* id_val;
   int num_val;
   char *op_val;
 
-#line 112 "phase2.tab.h" /* yacc.c:1909  */
+#line 111 "phase2.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

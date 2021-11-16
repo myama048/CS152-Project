@@ -12,7 +12,7 @@ LETTER   [a-zA-Z]
    
 %%
 
-function       {currPos += yyleng; printf("function\n"); return FUNCTION;}
+function       {currPos += yyleng; printf("func\n;", yytext ); return FUNCTION;}
 beginparams    {currPos += yyleng; return BEGIN_PARAMS;}
 endparams      {currPos += yyleng; return END_PARAMS;}
 beginlocals    {currPos += yyleng; return BEGIN_LOCALS;}
