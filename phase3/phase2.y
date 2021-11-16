@@ -7,10 +7,7 @@
  
    // Call external files
    void yyerror(const char *msg);
-   //extern FILE *yyin;
-  // int yylex(void)
    extern int currLine;
-   //extern int currPos;
 
    int myError = 0;
    int otherError = 0;
@@ -22,14 +19,6 @@
    char list_of_function_names[100][100] = {'\0'};
    int count_names = 0;
 
-   // To make external file
-    //string outFile;
-    //ofstream myFile; 
-    //bool param = false;
-    //int paramVal;
-    //int numLabel;
-    //int varNum;
-
    // Global Variables
     int count = 0;
     int expressionCount = 0;
@@ -40,8 +29,6 @@
     char string_var[100][20] = {'\0'};
     int index_var = 0;
 
-//#define YYDEBUG 1
-//yydebug=1;
 %}
 
 %union {
@@ -76,10 +63,8 @@
 %%
 
 prog_start: 
-	functions 
-	{
-		
-	}	
+	functions
+	
 	| functions prog_start
 functions: 
 	/* epsilon */
