@@ -850,7 +850,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 15 "phase2.lex"
-{currPos += yyleng; return FUNCTION;}
+{currPos += yyleng; printf("function\n"); return FUNCTION;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
@@ -1101,27 +1101,27 @@ YY_RULE_SETUP
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 70 "phase2.lex"
+#line 71 "phase2.lex"
 {currPos += yyleng; identToken = yytext; return IDENT;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 72 "phase2.lex"
+#line 73 "phase2.lex"
 { printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currPos, yytext); exit(0);}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 74 "phase2.lex"
+#line 75 "phase2.lex"
 {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currPos, yytext); exit(0);}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 77 "phase2.lex"
+#line 78 "phase2.lex"
 {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 79 "phase2.lex"
+#line 80 "phase2.lex"
 ECHO;
 	YY_BREAK
 #line 1128 "lex.yy.c"
@@ -2118,7 +2118,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 79 "phase2.lex"
+#line 80 "phase2.lex"
 
 
 

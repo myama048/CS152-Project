@@ -12,7 +12,7 @@ LETTER   [a-zA-Z]
    
 %%
 
-function       {currPos += yyleng; return FUNCTION;}
+function       {currPos += yyleng; printf("function\n"); return FUNCTION;}
 beginparams    {currPos += yyleng; return BEGIN_PARAMS;}
 endparams      {currPos += yyleng; return END_PARAMS;}
 beginlocals    {currPos += yyleng; return BEGIN_LOCALS;}
@@ -66,6 +66,7 @@ return         {currPos += yyleng; return RETURN;}
 [ \t]+         {/* ignore spaces */ currPos += yyleng;}
 
 "\n"           {currLine++; currPos = 1;}
+
 
 ({LETTER})|({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))     {currPos += yyleng; identToken = yytext; return IDENT;}
 

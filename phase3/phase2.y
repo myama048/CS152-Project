@@ -99,6 +99,7 @@ functions:
 
 function: 
 	FUNCTION ident SEMICOLON
+	{printf("Hello3\n");}
 	BEGIN_PARAMS declarations END_PARAMS
 	BEGIN_LOCALS declarations END_LOCALS
 	BEGIN_BODY statements END_BODY
@@ -117,6 +118,7 @@ declaration:
 	{
 	//char *token = $1;
 	 //printf(". %s\n", token);
+	printf("Hellodec\n");
 	int i;
 	for(i = 0; i < index_ident; i++){
 		printf(". %s\n", string[i]);
@@ -139,13 +141,15 @@ declaration:
 identifiers: 
 	ident
 	{
-	strcpy(string[index_ident], $1);
+	//strcpy(string[index_ident], $1);
+	printf(string[index_ident], $1);
 	index_ident += 1;
 	}
 
 	| ident COMMA identifiers
 	{	
-	strcpy(string[index_ident], $1);
+	//strcpy(string[index_ident], $1);
+	printf(string[index_ident], $1);
 	index_ident += 1;		  
 	}
 
@@ -261,19 +265,15 @@ term:
 	var
 	{$$ = $1;}
 		
-	| SUB var
 		
 	| NUMBER
 	{$$ = $1;}
-        | SUB NUMBER
 			
 	| L_PAREN expression R_PAREN
 	{
 	$$ = $2;
-	}
-		
-	| SUB L_PAREN expression R_PAREN
-		
+	
+	}		
 	| ident {} L_PAREN expressions R_PAREN 
 	{ // 
            char* buffer = malloc(sizeof(char) * 20);
@@ -368,12 +368,12 @@ var:
 vars:
 	var
 	{
-	strcpy(string_var[index_var-1], $1);
+	strcpy(string_var[index_var], $1);
 	index_var += 1;
 	}	
 	| var COMMA vars
 	{
-	strcpy(string_var[index_var-1], $1);
+	strcpy(string_var[index_var], $1);
 	index_var += 1;
 	}
 		
@@ -383,7 +383,9 @@ vars:
 
 int main(int argc, char **argv)
 {
+   printf("Hello\n");
    yyparse();
+   printf("Hello2\n");
    return 0;
 }
 
