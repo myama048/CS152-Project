@@ -102,7 +102,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 47 "phase2.y" /* yacc.c:1909  */
+#line 33 "phase2.y" /* yacc.c:1909  */
 
   int num_val;
   char *op_val;
