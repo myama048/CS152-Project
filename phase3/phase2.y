@@ -1,9 +1,10 @@
 %{
-   // ALl includes go here
+   // All includes go here
    #include<stdio.h>
    #include<stdlib.h>
    #include<stdbool.h>
    #include<string.h>
+   #include<stack>
  
    // All lines below come from sample doc
    void yyerror(const char *msg);
@@ -11,11 +12,11 @@
    int myError = 0;
    int otherError = 0;
 
-   char *identToken = "/";
+   char *identToken;	
    int numberToken;
    int productionID = 0;
 
-   char list_of_function_names[100][100] = {'\0'};
+   char list_of_function_names[100][100];
    int count_names = 0;
 
    // Global Variables
@@ -27,17 +28,22 @@
     int index_ident = 0;
     char string_var[100][20] = {'\0'};
     int index_var = 0;
+	stack<string> factory;
 
 %}
 
 %union {
   int num_val;
   char *op_val;
+  struct info {
+	  char name[255];
+	  int value;
+   }
 }
 
 
 %define parse.error verbose
-%type <op_val> var
+%type <info> var
 %type <op_val> ident
 %type <op_val> expression
 %type <op_val> multiplicative_expression
@@ -111,7 +117,7 @@ declaration:
 identifiers: 
 	ident
 	{
-          strcpy(string[index_ident], $1);
+        //strcpy(string[index_ident], $1);
 		index_ident += 1;
 	}
 
@@ -315,7 +321,7 @@ comp:
 
 var: 
 	ident 
-	{$$ = $1;}
+	{$$.name = $1;}
 			
 	| ident L_SQUARE_BRACKET expression R_SQUARE_BRACKET
 	{ 
@@ -330,6 +336,7 @@ var:
 vars:
 	var
 	{
+	factory.push($1)
 	strcpy(string_var[index_var], $1);
 	index_var += 1;
 	}	

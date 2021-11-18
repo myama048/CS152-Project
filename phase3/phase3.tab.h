@@ -39,6 +39,17 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 2 "phase3.y" /* yacc.c:1909  */
+
+	struct Info {
+	  char *name;
+	  int value;
+	  int type;
+	  //Info() {};
+   };
+
+#line 53 "phase3.tab.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -102,13 +113,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 48 "phase3.y" /* yacc.c:1909  */
+#line 51 "phase3.y" /* yacc.c:1909  */
 
   int num_val;
   char *op_val;
-  Info info;
+  Info* info;
 
-#line 112 "phase3.tab.h" /* yacc.c:1909  */
+#line 123 "phase3.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

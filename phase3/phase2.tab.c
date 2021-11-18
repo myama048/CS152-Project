@@ -64,7 +64,7 @@
 /* Copy the first part of user declarations.  */
 #line 1 "phase2.y" /* yacc.c:339  */
 
-   // ALl includes go here
+   // All includes go here
    #include<stdio.h>
    #include<stdlib.h>
    #include<stdbool.h>
@@ -76,7 +76,7 @@
    int myError = 0;
    int otherError = 0;
 
-   char *identToken = "/";
+   char *identToken;	
    int numberToken;
    int productionID = 0;
 
@@ -1420,7 +1420,7 @@ yyreduce:
   case 13:
 #line 113 "phase2.y" /* yacc.c:1646  */
     {
-          printf(string[index_ident], (yyvsp[0].op_val));
+        //strcpy(string[index_ident], $1);
 		index_ident += 1;
 	}
 #line 1427 "phase2.tab.c" /* yacc.c:1646  */

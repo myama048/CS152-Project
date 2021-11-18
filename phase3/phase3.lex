@@ -1,6 +1,7 @@
 %option noyywrap
 %{   
 #include "phase3.tab.h"
+#include <string>
    int currLine = 1, currPos = 1;
    
    extern char *identToken;
@@ -59,7 +60,8 @@ return         {currPos += yyleng; return RETURN;}
 ":="           {currPos += yyleng; return ASSIGN;}
 "continue"     {currPos += yyleng; return CONTINUE;}
 
-{DIGIT}+       {currPos += yyleng; numberToken = atoi(yytext); return NUMBER;}
+{DIGIT}+       {currPos += yyleng; numberToken = atoi(yytext); char *buffer = new char[yyleng+1]; strcpy(buffer, yytext); yylval.op_val = buffer;  printf("ADLFKJDS %s\n", yytext);
+ return NUMBER;}
 
 ##(.)*\n       {/* do not print comments */ currLine++; currPos = 1;}
 
@@ -68,7 +70,8 @@ return         {currPos += yyleng; return RETURN;}
 "\n"           {currLine++; currPos = 1;}
 
 
-({LETTER})|({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))     {currPos += yyleng; identToken = yytext; return IDENT;}
+({LETTER})|({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))  {currPos += yyleng; identToken = yytext; char *buffer = new char[yyleng+1]; strcpy(buffer, yytext); yylval.op_val = buffer;  printf("SDLFKJDS %s\n", yytext);
+ return IDENT;}
 
 ((("_")+)|(({DIGIT})+({LETTER}|"_")))({DIGIT}|{LETTER}|"_")*                { printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currPos, yytext); exit(0);}
 
@@ -76,7 +79,7 @@ return         {currPos += yyleng; return RETURN;}
 
 
 .   {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
-
+    
 %%
 
 

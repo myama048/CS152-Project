@@ -1,9 +1,9 @@
-all: phase2
-phase2.tab.c phase2.tab.h:	phase2.y
-	bison -t -v -d phase2.y
-lex.yy.c: phase2.lex phase2.tab.h
-	flex phase2.lex 
-phase2: lex.yy.c phase2.tab.c phase2.tab.h
-	gcc -g -o phase2 phase2.tab.c lex.yy.c
+all: phase3
+phase3.tab.c phase3.tab.h:	phase3.y
+	bison -t -v -d phase3.y
+lex.yy.c: phase3.lex phase3.tab.h
+	flex phase3.lex 
+phase3: lex.yy.c phase3.tab.c phase3.tab.h
+	g++ -std=c++11 -g -Wall -ansi -pedantic -o phase3 phase3.tab.c lex.yy.c
 clean:
-	rm phase2 phase2.tab.c lex.yy.c phase2.tab.h phase2.output
+	rm phase3 phase3.tab.c lex.yy.c phase3.tab.h phase3.output

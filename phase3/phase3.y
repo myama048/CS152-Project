@@ -1,13 +1,24 @@
 
-%{
+%code requires {
+	struct Info {
+	  char *name;
+	  int value;
+	  int type;
+	  //Info() {};
+   };
+}
+
+%code{
    // All includes go here
    #include<string>
    #include<stack>
    #include<iostream>
+   #include "phase3.tab.h"
+   #include "phase2.tab.h"
    using namespace std;
  
    // All lines below come from sample doc
-   void yyerror(const char *msg);
+  void yyerror(const char *msg);
    extern int yylex();
    extern int currLine;
    int myError = 0;
@@ -18,39 +29,30 @@
    int productionID = 0;
 
    char list_of_function_names[100][100];
-   int count_names = 0;
+   int count_names = 0; 
 
 
 	// Global Variables
     int count = 0;
-    int expressionCount = 0;
-    bool read_bool = false;
-    bool is_array = false;
-    char string[100][20] = {'\0'};
+    //int expressionCount = 0;
+    //bool read_bool = false;
+    //bool is_array = false;
+    //char string[100][20] = {'\0'};
     int index_ident = 0;
-    char string_var[100][20] = {'\0'};
-    int index_var = 0;
+    //char string_var[100][20] = {'\0'};
+    //int index_var = 0;
 
-
-	struct Info {
-	  char name[255];
-	  int value;
-	  int type;
-	  //Info() {};
-   };
-
-   	stack<Info> varsStack;
+   	stack<Info*> varsStack;
 	stack<string> termStack;
 	stack<string> identifierStack;
+}
 
-%}
 
 %union {
   int num_val;
   char *op_val;
-  Info info;
+  Info* info;
 }
-
 
 %define parse.error verbose
 %type <info> var
@@ -108,21 +110,19 @@ declarations:
 declaration: 
 	identifiers COLON INTEGER
 	{
-	int i;
-	for(i = 0; i < index_ident; i++){
-		printf(". %s\n", string[i]);
-	}
-	 index_ident = 0;
+	 while(!identifierStack.empty()) {
+		 cout << ". " << identifierStack.top() << endl;
+		 identifierStack.pop();
+	 	}
 	}
 		
 	| identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER
 	{
-	int i;
-	for(i = 0; i < index_ident; i++){
-		printf(".[] %s, %s\n", string[i], $5);
+	while(!identifierStack.empty())	{
+		cout << ".[] " << identifierStack.top() <<"," << $5 << endl;
+		identifierStack.pop();
+		}
 	}
-         index_ident = 0;
-	}	
 
 identifiers: 
 	ident
@@ -163,15 +163,15 @@ statement:
 		
 	| READ vars
 	{
-		if(varsStack.top().type==0) {
+		if(varsStack.top()->type==0) {
 			while(!varsStack.empty()) {
-				cout << ".< " + varsStack.top().name << endl;
+				cout << ".< " << varsStack.top()->name << endl;
 				varsStack.pop();
 			}
 		}
 		else {
 			while(!varsStack.empty()) {
-				cout << ".[]<" + varsStack.top().name + ", " + varsStack.top().value << endl;
+				cout << ".[]<" << varsStack.top()->name << ", " << varsStack.top()->value << endl;
 				varsStack.pop(); 
 			}
 		}
@@ -181,15 +181,15 @@ statement:
 		
 	| WRITE vars
 	{
-		if(varsStack.top().type==0) {
+		if(varsStack.top()->type==0) {
 			while(!varsStack.empty()) {
-				cout << ".> " + varsStack.top().name << endl;
+				cout << ".> " << varsStack.top()->name << endl;
 				varsStack.pop();
 			}
 		}
 		else {
 			while(!varsStack.empty()) {
-				cout << ".[]>" + varsStack.top().name + ", " + varsStack.top().value << endl;
+				cout << ".[]>" << varsStack.top()->name << ", " << varsStack.top()->value << endl;
 				varsStack.pop(); 
 			}
 		}
@@ -210,21 +210,29 @@ statements:
 expression: 
 	multiplicative_expression
 		{$$ = $1; }
-	| multiplicative_expression ADD expression
+ | multiplicative_expression ADD expression
 	{
 		char *src1 = $1;
 		char *src2 = $3;
-		char *dest = "_temp";
-		printf("+ %s, %s, %s\n", dest, src1, src2);
-		$$ = dest;
+		char buffer[10];
+		string *dest = new string; 
+		sprintf(buffer, "%d", count++);
+		*dest = string("temp") + buffer;
+		cout << ". " << *dest << endl;
+		cout << "+ " << *dest << ", " << *src1 << ", " << *src2 << endl;
+		$$ = (char*)dest->c_str();
 	}
 	| multiplicative_expression SUB expression
 	{
 		char *src1 = $1;
 		char *src2 = $3;
-		char *dest = "_temp";
-		printf("- %s, %s, %s\n", dest, src1, src2);
-		$$ = dest;
+		char buffer[10];
+		string *dest = new string; 
+		sprintf(buffer, "%d", count++);
+		*dest = string("temp") + buffer;
+		cout << ". " << dest << endl;
+		cout << "- " << dest << ", " << src1 << ", " << src2 << endl;
+		$$ = (char*)dest->c_str();
 	}
 
 multiplicative_expression: 
@@ -235,30 +243,46 @@ multiplicative_expression:
 		{ 
 		char *src1 = $1;
 		char *src2 = $3;
-		char *dest = "_temp";
-		printf("* %s, %s, %s\n", dest, src1, src2);
-		$$ = dest;
+		char buffer[10];
+		string *dest = new string; 
+		sprintf(buffer, "%d", count++);
+		*dest = string("temp") + buffer;
+		cout << ". " << *dest << endl;
+		cout << "* " << *dest << ", " << src1 << ", " << src2 << endl;
+		$$ = (char*)dest->c_str();
 		}
 	| term DIV multiplicative_expression
 		{
 		char *src1 = $1;
 		char *src2 = $3;
-		char *dest = "_temp";
-		printf("/ %s, %s, %s\n", dest, src1, src2);
-		$$ = dest;
+		char buffer[10];
+		string *dest = new string; 
+		//*dest = "temp" + to_string(count++);
+		sprintf(buffer, "%d", count++);
+		*dest = string("temp") + buffer;
+		cout << ". " << *dest << endl;
+		cout << "/ " << *dest << ", " << src1 << ", " << src2 << endl;
+		$$ = (char*)dest->c_str();
 		}
 	| term MOD multiplicative_expression
 		{
 		char *src1 = $1;
 		char *src2 = $3;
-		char *dest = "_temp";
-		printf(" / %s, %s, %s\n", dest, src1, src2);
-		$$ = dest;
+		//char *dest = new char[10];
+		//dest = "temp";
+		char buffer[10];
+		string *dest = new string; 
+		//*dest = "temp" + to_string(count++);
+		sprintf(buffer, "%d", count++);
+		*dest = string("temp") + buffer;
+		cout << ". " << *dest << endl;
+		cout << "%" << *dest << ", " << src1 << ", " << src2 << endl;
+		$$ = (char*)dest->c_str();
 		}
 
 term: 
 	var
-		{$$ = $1.name;}
+		{$$ = $1->name;}
 	| NUMBER
 		{$$ = $1;}
 	| L_PAREN expression R_PAREN
@@ -267,9 +291,11 @@ term:
 	}		
 	| ident {} L_PAREN expressions R_PAREN 
 	{  
-		string temp = "temp" + count++;
-		$$ = temp;
-		printf("call %s, %s\n", $1, temp);
+		char buffer[10]; // Create buffer
+		string *dest = new string;
+		sprintf(buffer, "%d", count++);
+		*dest = string("temp") + buffer;
+		cout<< "call" << (char*)dest->c_str();
 	}
 		
 
@@ -338,18 +364,22 @@ comp:
 var: 
 	ident 
 	{
-			$$.name = $1;
-			$$.type = 0;
+			$$->name = $1;
+			$$->type = 0;
 	}
 	| ident L_SQUARE_BRACKET expression R_SQUARE_BRACKET
 	{ 
-		$$.type = 1;
-		string temp = "temp" + count++;
-		$$.name = temp;
-		char* src = $1;
-		char* idx = $3;
-		$$.value = idx;
-		printf("=[] %s, %s, %s", temp, src, idx);
+		char *src1 = $1;
+		char *src2 = $3;
+		char buffer[10];
+		string *dest = new string; 
+		sprintf(buffer, "%d", count++);
+		*dest = string("temp") + buffer;
+		cout << ". " << *dest << endl;
+		cout << "=[]" << *dest << ", " << src1 << ", " << src2 << endl;
+		$$->type = 1;
+		$$->value = atoi(src2);
+		$$->name = (char*)dest->c_str();
 	}
 		
 vars:
