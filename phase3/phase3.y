@@ -33,6 +33,8 @@
     int index_ident = 0;
     char string_var[100][20] = {'\0'};
     int index_var = 0;
+	int index_label = 0;
+	int index_end_label = 0;
 	//pair<string,string> str_int_pair;
 
    	stack<string> varsStack;
@@ -53,8 +55,10 @@
 %type <op_val> expression
 %type <op_val> multiplicative_expression
 %type <op_val> term
-//%type <op_val> relation_exp
-//%type <op_val> comp
+%type <op_val> statement
+%type <op_val> bool_exp
+%type <op_val> relation_exp
+%type <op_val> relation_and_exp
 %start prog_start
 %token BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY
 %token FUNCTION RETURN MAIN
@@ -151,28 +155,19 @@ statement:
   printf("= %s, %s\n", dest, src);
 }
 
-	| IF bool_exp THEN statements ENDIF
-		{
-			cout << "! " << $2 << ", " << $2 << endl; // dest0
-			
-		}
-	| IF bool_exp THEN statements ELSE statements ENDIF
-		{
-			if($2 == 1){
-
-			}
-			else{
-
-			}
-		}
-	| WHILE bool_exp 
+	| IF bool_exp {cout << "! " << $2 << ", " << $2 << endl; cout << "?:= " << "label" << index_label << ", " << $2 << endl;} THEN statements { cout << ":= end"<< index_end_label << endl; }
+	 ELSE {cout << ": label" << index_label++ << endl;} statements ENDIF {cout << ": end" << index_end_label++ << endl;}
+	
+	| IF bool_exp {cout <<"! " << $2 << ", " << $2 << endl; cout << "?:= " << "label" << index_label << ", " << $2 << endl;} THEN statements ENDIF
+		{ cout << ": label" << index_label++ << endl;}
+	
+	| WHILE {cout << ": label" << index_label << endl;} relation_exp 
 	{
-		// beginning of the loop
-		//printf("begining of loop\n");
-		printf(": loop_label\n");
-		printf("?:= loop_body, %s\n", "1");
-		printf(":= loop_end\n");
-		printf(": loop_body\n");
+		// push stack
+		//cout << ": label" << index_label << endl;
+		cout << "?:= loop_body, " << $3 << endl;
+		cout << ":= loop_end" << index_end_label << endl;
+		cout << ": loop_body" << endl;
 	}
         BEGINLOOP statements
 	{
@@ -181,8 +176,9 @@ statement:
 	ENDLOOP
 	{
    		// end of the loop
-   		printf(":= loop_label\n");
-   		printf(": loop_end\n");
+		cout << ":= label" << index_label << endl;
+   		cout << ": loop_end" << index_end_label << endl;
+		// pop stack
 	}
 	| DO BEGINLOOP statements ENDLOOP WHILE bool_exp
 		{
@@ -368,7 +364,7 @@ relation_exp:
 		cout << ". " << *dest << endl;
 		cout << compStack.top();
 		compStack.pop(); 
-		cout << " " << *dest << ", " << *src1 << ", " << *src2 << endl; // == dest, src1, src2
+		cout << " " << *dest << ", " << src1 << ", " << src2 << endl; // == dest, src1, src2
 		$$ = (char*)dest->c_str();
 	}
 		

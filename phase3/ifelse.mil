@@ -1,0 +1,17 @@
+func main
+. a
+. b
+. c
+= a, 100
+= b, 50
+. temp0
+< temp0, a, b
+! temp0, temp0
+?:= label0, temp0
+= c, b
+:= end0
+: label0
+= c, a
+: end0
+.> c
+endfunc
