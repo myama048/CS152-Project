@@ -4,13 +4,13 @@ func main
 : label0
 . temp0
 < temp0, i, 10
-?:= loop_body, temp0
-:= loop_end
-: loop_body
+?:= loop_body0, temp0
+:= loop_end0
+: loop_body0
 . temp1
 + temp1, i, 1
 = i, temp1
 .> i
 := label0
-: loop_end
+: loop_end0
 endfunc

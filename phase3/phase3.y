@@ -36,11 +36,12 @@
 	int index_label = 0;
 	int index_end_label = 0;
 	//pair<string,string> str_int_pair;
-
+	
    	stack<string> varsStack;
 	stack<string> termStack;
 	stack<string> identifierStack;
 	stack<string> compStack;
+	stack<int> whileStack;
 }
 
 
@@ -161,13 +162,14 @@ statement:
 	| IF bool_exp {cout <<"! " << $2 << ", " << $2 << endl; cout << "?:= " << "label" << index_label << ", " << $2 << endl;} THEN statements ENDIF
 		{ cout << ": label" << index_label++ << endl;}
 	
-	| WHILE {cout << ": label" << index_label << endl;} relation_exp 
+	| WHILE {whileStack.push(index_label++); cout << ": label" << whileStack.top() << endl;} relation_exp 
 	{
 		// push stack
+		//whileStack.push("label" + index_label++);
 		//cout << ": label" << index_label << endl;
-		cout << "?:= loop_body, " << $3 << endl;
-		cout << ":= loop_end" << index_end_label << endl;
-		cout << ": loop_body" << endl;
+		cout << "?:= loop_body" << whileStack.top() << ", " << $3 << endl;
+		cout << ":= loop_end" << whileStack.top() << endl;
+		cout << ": loop_body" << whileStack.top() << endl;
 	}
         BEGINLOOP statements
 	{
@@ -176,9 +178,10 @@ statement:
 	ENDLOOP
 	{
    		// end of the loop
-		cout << ":= label" << index_label << endl;
-   		cout << ": loop_end" << index_end_label << endl;
+		cout << ":= label" << whileStack.top() << endl;
+   		cout << ": loop_end" << whileStack.top() << endl;
 		// pop stack
+		whileStack.pop();
 	}
 	| DO BEGINLOOP statements ENDLOOP WHILE bool_exp
 		{
