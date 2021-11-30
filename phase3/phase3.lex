@@ -60,7 +60,7 @@ return         {currPos += yyleng; return RETURN;}
 ":="           {currPos += yyleng; return ASSIGN;}
 "continue"     {currPos += yyleng; return CONTINUE;}
 
-{DIGIT}+       {currPos += yyleng; numberToken = atoi(yytext); char *buffer = new char[yyleng+1]; strcpy(buffer, yytext); yylval.op_val = buffer;  printf("ADLFKJDS %s\n", yytext);
+{DIGIT}+       {currPos += yyleng; numberToken = atoi(yytext); char *buffer = new char[yyleng+1]; strcpy(buffer, yytext); yylval.op_val = buffer; 
  return NUMBER;}
 
 ##(.)*\n       {/* do not print comments */ currLine++; currPos = 1;}
@@ -70,7 +70,7 @@ return         {currPos += yyleng; return RETURN;}
 "\n"           {currLine++; currPos = 1;}
 
 
-({LETTER})|({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))  {currPos += yyleng; identToken = yytext; char *buffer = new char[yyleng+1]; strcpy(buffer, yytext); yylval.op_val = buffer;  printf("SDLFKJDS %s\n", yytext);
+({LETTER})|({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))  {currPos += yyleng; identToken = yytext; char *buffer = new char[yyleng+1]; strcpy(buffer, yytext); yylval.op_val = buffer; 
  return IDENT;}
 
 ((("_")+)|(({DIGIT})+({LETTER}|"_")))({DIGIT}|{LETTER}|"_")*                { printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currPos, yytext); exit(0);}

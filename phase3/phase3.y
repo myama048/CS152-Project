@@ -1,18 +1,10 @@
 
-%code requires {
-	struct Info {
-	  char *name;
-	  int value;
-	  int type;
-	  //Info() {};
-   };
-}
-
 %code{
    // All includes go here
    #include<string>
    #include<stack>
    #include<iostream>
+   #include<utility>
    #include "phase3.tab.h"
    #include "phase2.tab.h"
    using namespace std;
@@ -39,27 +31,30 @@
     //bool is_array = false;
     //char string[100][20] = {'\0'};
     int index_ident = 0;
-    //char string_var[100][20] = {'\0'};
-    //int index_var = 0;
+    char string_var[100][20] = {'\0'};
+    int index_var = 0;
+	//pair<string,string> str_int_pair;
 
-   	stack<Info*> varsStack;
+   	stack<string> varsStack;
 	stack<string> termStack;
 	stack<string> identifierStack;
+	stack<string> compStack;
 }
 
 
 %union {
   int num_val;
   char *op_val;
-  Info* info;
 }
 
 %define parse.error verbose
-%type <info> var
+%type <op_val> var
 %type <op_val> ident
 %type <op_val> expression
 %type <op_val> multiplicative_expression
 %type <op_val> term
+//%type <op_val> relation_exp
+//%type <op_val> comp
 %start prog_start
 %token BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY
 %token FUNCTION RETURN MAIN
@@ -82,11 +77,15 @@
 prog_start: 
 	functions
 	
-	| functions prog_start
+	| functions prog_start{}
+
 functions: 
 	/* epsilon */
 		
-	| function functions
+	| function functions 
+	{
+		
+	}
 		
 
 function: 
@@ -95,8 +94,17 @@ function:
 	   printf("func %s\n", $2);
 	}
 	BEGIN_PARAMS declarations END_PARAMS
+	{
+		
+	}
 	BEGIN_LOCALS declarations END_LOCALS
-	BEGIN_BODY statements END_BODY
+	{
+		
+	}
+	BEGIN_BODY statements END_BODY 
+	{
+		cout << "endfunc" << endl;
+	}
 
 ident:
 	IDENT
@@ -134,72 +142,70 @@ identifiers:
 		identifierStack.push($1);	  
 	}
 
-statement:
-	ident L_SQUARE_BRACKET expression R_SQUARE_BRACKET ASSIGN expression
-	{
-	char* dest = $1;
-	char* idx = $3;
-	char* src = $6;
-	printf("[]= %s, %s, %s\n", dest, idx, src);
-	}
 
-	| ident ASSIGN expression
-	{
-	char* dest = $1;
-	char* src = $3; 
-	printf("= %s, %s\n", dest, src);
-	}
- 
+statement: 
+	var ASSIGN expression
+{
+  char *dest = $1;
+  char *src  = $3;
+  printf("= %s, %s\n", dest, src);
+}
+
 	| IF bool_exp THEN statements ENDIF
-	{
-
-	}
-		
+		{
+			cout << "! " << $2 << ", " << $2 << endl; // dest0
+			
+		}
 	| IF bool_exp THEN statements ELSE statements ENDIF
-		
-	| WHILE bool_exp BEGINLOOP statements ENDLOOP
-		
+		{
+			if($2 == 1){
+
+			}
+			else{
+
+			}
+		}
+	| WHILE bool_exp 
+	{
+		// beginning of the loop
+		//printf("begining of loop\n");
+		printf(": loop_label\n");
+		printf("?:= loop_body, %s\n", "1");
+		printf(":= loop_end\n");
+		printf(": loop_body\n");
+	}
+        BEGINLOOP statements
+	{
+    // loop body.
+	} 
+	ENDLOOP
+	{
+   		// end of the loop
+   		printf(":= loop_label\n");
+   		printf(": loop_end\n");
+	}
 	| DO BEGINLOOP statements ENDLOOP WHILE bool_exp
-		
-	| READ vars
-	{
-		if(varsStack.top()->type==0) {
-			while(!varsStack.empty()) {
-				cout << ".< " << varsStack.top()->name << endl;
-				varsStack.pop();
-			}
+		{
+			
 		}
-		else {
-			while(!varsStack.empty()) {
-				cout << ".[]<" << varsStack.top()->name << ", " << varsStack.top()->value << endl;
-				varsStack.pop(); 
-			}
+	| READ IDENT
+		{
+			printf(".< %s\n", $2);
 		}
-	}
-
-
-		
-	| WRITE vars
-	{
-		if(varsStack.top()->type==0) {
-			while(!varsStack.empty()) {
-				cout << ".> " << varsStack.top()->name << endl;
-				varsStack.pop();
-			}
+	| WRITE IDENT
+		{
+			printf(".> %s\n", $2);
 		}
-		else {
-			while(!varsStack.empty()) {
-				cout << ".[]>" << varsStack.top()->name << ", " << varsStack.top()->value << endl;
-				varsStack.pop(); 
-			}
-		}
-	}
-
-
 	| CONTINUE
-		
+		{
+			
+		}
 	| RETURN expression
-		
+		{
+			
+		};
+
+
 	
 statements: 
 	statement SEMICOLON/* epsilon */
@@ -209,7 +215,11 @@ statements:
 
 expression: 
 	multiplicative_expression
-		{$$ = $1; }
+		{
+			//std::cout<< "abcde"<<endl;
+			$$ = $1; 
+		}
+
  | multiplicative_expression ADD expression
 	{
 		char *src1 = $1;
@@ -237,7 +247,10 @@ expression:
 
 multiplicative_expression: 
 	term
-		{ $$ = $1;}	
+		{ 
+			//cout<<"term: "<< $1 << endl; 
+			$$ = $1;
+		}	
 
 	| term MULT multiplicative_expression
 		{ 
@@ -282,9 +295,16 @@ multiplicative_expression:
 
 term: 
 	var
-		{$$ = $1->name;}
+		{   
+			//cout<<"var: " << $1 << endl;
+			$$ = $1;
+
+		}
 	| NUMBER
-		{$$ = $1;}
+		{
+			//cout<<"Number: " << $1 << endl;
+			$$ = $1;
+		}
 	| L_PAREN expression R_PAREN
 	{
 		$$ = $2;
@@ -319,18 +339,38 @@ comma_sep_expressions:
 
 bool_exp:
 	relation_and_exp
+	{
+		$$ = $1;
+	}
 		
 	| relation_and_exp OR bool_exp
 		
 
 relation_and_exp:
-	relation_exp
+	relation_exp 
+	{
+		$$ = $1;
+	}
 		
 	| relation_exp AND relation_and_exp
-		
+	{}
 
 relation_exp:
-	expression comp expression
+	expression comp expression 
+	{
+		char *src1 = $1;
+		char *src2 = $3;
+		//char *sign = $2;
+		char buffer[10];
+		string *dest = new string; 
+		sprintf(buffer, "%d", count++);
+		*dest = string("temp") + buffer;
+		cout << ". " << *dest << endl;
+		cout << compStack.top();
+		compStack.pop(); 
+		cout << " " << *dest << ", " << *src1 << ", " << *src2 << endl; // == dest, src1, src2
+		$$ = (char*)dest->c_str();
+	}
 		
 	| NOT expression comp expression
 		
@@ -348,24 +388,41 @@ relation_exp:
 
 
 comp:
-	EQ
+	EQ 
+	{
+		//$$=$1;
+		compStack.push("==");
+	}
 		
 	| NEQ
-
+		{
+			compStack.push("!=");
+		}
 	| LT
-		
-	| GT
+		{
+			compStack.push("<");
+		}
+	| GT 
+		{
+			compStack.push(">");
+		}
 		
 	| LTE
+		{
+			compStack.push("<=");
+		}
 		
 	| GTE
+		{
+			compStack.push(">=");
+		}
 		
 
 var: 
 	ident 
 	{
-			$$->name = $1;
-			$$->type = 0;
+			//cout << "ident: " << $1 << endl;
+			$$ = $1;
 	}
 	| ident L_SQUARE_BRACKET expression R_SQUARE_BRACKET
 	{ 
@@ -377,19 +434,23 @@ var:
 		*dest = string("temp") + buffer;
 		cout << ". " << *dest << endl;
 		cout << "=[]" << *dest << ", " << src1 << ", " << src2 << endl;
-		$$->type = 1;
-		$$->value = atoi(src2);
-		$$->name = (char*)dest->c_str();
 	}
 		
 vars:
 	var
 	{
+		/*
+		strcpy(string_var[index_var], $1)
 		varsStack.push($1);
+		index_var += 1;
+		*/
 	}	
 	| var COMMA vars
 	{
-		varsStack.push($1);
+		/*
+		strcpy(string_var[index_var], $1);
+		index_var += 1;
+		*/
 	}
 		
 %%

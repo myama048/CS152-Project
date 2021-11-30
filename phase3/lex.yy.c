@@ -1081,7 +1081,7 @@ YY_RULE_SETUP
 case 47:
 YY_RULE_SETUP
 #line 63 "phase3.lex"
-{currPos += yyleng; numberToken = atoi(yytext); char *buffer = new char[yyleng+1]; strcpy(buffer, yytext); yylval.op_val = buffer;  printf("ADLFKJDS %s\n", yytext);
+{currPos += yyleng; numberToken = atoi(yytext); char *buffer = new char[yyleng+1]; strcpy(buffer, yytext); yylval.op_val = buffer; 
  return NUMBER;}
 	YY_BREAK
 case 48:
@@ -1104,7 +1104,7 @@ YY_RULE_SETUP
 case 51:
 YY_RULE_SETUP
 #line 73 "phase3.lex"
-{currPos += yyleng; identToken = yytext; char *buffer = new char[yyleng+1]; strcpy(buffer, yytext); yylval.op_val = buffer;  printf("SDLFKJDS %s\n", yytext);
+{currPos += yyleng; identToken = yytext; char *buffer = new char[yyleng+1]; strcpy(buffer, yytext); yylval.op_val = buffer; 
  return IDENT;}
 	YY_BREAK
 case 52:
