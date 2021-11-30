@@ -156,21 +156,53 @@ statement:
   printf("= %s, %s\n", dest, src);
 }
 
-	| IF bool_exp {cout << "! " << $2 << ", " << $2 << endl; cout << "?:= " << "label" << index_label << ", " << $2 << endl;} THEN statements { cout << ":= end"<< index_end_label << endl; }
-	 ELSE {cout << ": label" << index_label++ << endl;} statements ENDIF {cout << ": end" << index_end_label++ << endl;}
+	| IF bool_exp 
+		{	
+			//cout << "WRONG GRAMMAR1" << endl;
+			cout << "! " << $2 << ", " << $2 << endl;
+			cout << "?:= " << "label" << index_label << ", " << $2 << endl;
+		}
+	 THEN statements
+		{
+			cout << ":= end"<< index_end_label << endl;
+		}
+	 ELSE
+		{
+			cout << ": label" << index_label++ << endl;
+		}
+	statements ENDIF
+		{
+			//cout << "WRONG GRAMMAR" << endl;
+			cout << ": end" << index_end_label++ << endl;
+			//cout << "WRONG GRAMMAR" << endl;
+		}
 	
-	| IF bool_exp {cout <<"! " << $2 << ", " << $2 << endl; cout << "?:= " << "label" << index_label << ", " << $2 << endl;} THEN statements ENDIF
-		{ cout << ": label" << index_label++ << endl;}
+	| IF bool_exp
+		{
+			//cout << "NO ELSE 1" << endl;
+			cout <<"! " << $2 << ", " << $2 << endl;
+			cout << "?:= " << "label" << index_label << ", " << $2 << endl;
+		}
+	THEN statements ENDIF
+		{
+			//cout << "NO ELSE" << endl;
+			cout << ": label" << index_label++ << endl;
+		}
 	
-	| WHILE {whileStack.push(index_label++); cout << ": label" << whileStack.top() << endl;} relation_exp 
-	{
-		// push stack
-		//whileStack.push("label" + index_label++);
-		//cout << ": label" << index_label << endl;
-		cout << "?:= loop_body" << whileStack.top() << ", " << $3 << endl;
-		cout << ":= loop_end" << whileStack.top() << endl;
-		cout << ": loop_body" << whileStack.top() << endl;
-	}
+	| WHILE 
+		{
+			whileStack.push(index_label++);
+			cout << ": label" << whileStack.top() << endl;
+		}
+	relation_exp 
+		{
+			// push stack
+			//whileStack.push("label" + index_label++);
+			//cout << ": label" << index_label << endl;
+			cout << "?:= loop_body" << whileStack.top() << ", " << $3 << endl;
+			cout << ":= loop_end" << whileStack.top() << endl;
+			cout << ": loop_body" << whileStack.top() << endl;
+		}
         BEGINLOOP statements
 	{
     // loop body.
@@ -197,7 +229,8 @@ statement:
 		}
 	| CONTINUE
 		{
-			
+			//cout << "CONTIUNE" << endl;
+			cout << ":= label" << whileStack.top() << endl;			
 		}
 	| RETURN expression
 		{

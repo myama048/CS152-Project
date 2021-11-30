@@ -1,0 +1,15 @@
+
+function main;
+beginparams
+endparams
+beginlocals
+
+b : array [10] of integer;
+
+endlocals
+beginbody
+
+  ## Error. Trying to use an array like an integer.
+  b := 100;
+
+endbody

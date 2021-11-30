@@ -1,0 +1,12 @@
+func main
+. i
+= i, 0
+: label0
+. temp0
+< temp0, i, 10
+?:= loop_body0, temp0
+:= loop_end0
+: loop_body0
+:= label0
+:= label0
+: loop_end0

@@ -1,0 +1,20 @@
+func main
+. i
+= i, 0
+: label0
+. temp0
+<= temp0, i, 10
+?:= loop_body0, temp0
+:= loop_end0
+: loop_body0
+. temp1
++ temp1, i, 1
+= i, temp1
+. temp2
+> temp2, i, 3
+WRONG GRAMMAR1
+! temp2, temp2
+?:= label1, temp2
+:= label0
+:= end0
+** Line 18: syntax error, unexpected ENDIF, expecting ELSE

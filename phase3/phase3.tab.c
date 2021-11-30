@@ -527,13 +527,13 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint16 yyrline[] =
 {
        0,    83,    83,    85,    87,    90,    98,   102,   106,    97,
-     115,   118,   120,   124,   132,   141,   145,   152,   159,   159,
-     160,   159,   162,   162,   165,   166,   175,   165,   186,   190,
-     194,   198,   202,   210,   212,   216,   222,   234,   248,   254,
-     266,   279,   296,   302,   307,   311,   311,   321,   324,   328,
-     333,   340,   345,   349,   354,   358,   374,   376,   378,   380,
-     382,   384,   386,   390,   396,   400,   404,   409,   414,   421,
-     426
+     115,   118,   120,   124,   132,   141,   145,   152,   160,   166,
+     170,   159,   181,   180,   193,   198,   207,   192,   218,   222,
+     226,   230,   235,   243,   245,   249,   255,   267,   281,   287,
+     299,   312,   329,   335,   340,   344,   344,   354,   357,   361,
+     366,   373,   378,   382,   387,   391,   407,   409,   411,   413,
+     415,   417,   419,   423,   429,   433,   437,   442,   447,   454,
+     459
 };
 #endif
 
@@ -1502,70 +1502,92 @@ yyreduce:
     break;
 
   case 18:
-#line 159 "phase3.y" /* yacc.c:1646  */
-    {cout << "! " << (yyvsp[0].op_val) << ", " << (yyvsp[0].op_val) << endl; cout << "?:= " << "label" << index_label << ", " << (yyvsp[0].op_val) << endl;}
-#line 1508 "phase3.tab.c" /* yacc.c:1646  */
+#line 160 "phase3.y" /* yacc.c:1646  */
+    {	
+			//cout << "WRONG GRAMMAR1" << endl;
+			cout << "! " << (yyvsp[0].op_val) << ", " << (yyvsp[0].op_val) << endl;
+			cout << "?:= " << "label" << index_label << ", " << (yyvsp[0].op_val) << endl;
+		}
+#line 1512 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 159 "phase3.y" /* yacc.c:1646  */
-    { cout << ":= end"<< index_end_label << endl; }
-#line 1514 "phase3.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 20:
-#line 160 "phase3.y" /* yacc.c:1646  */
-    {cout << ": label" << index_label++ << endl;}
+#line 166 "phase3.y" /* yacc.c:1646  */
+    {
+			cout << ":= end"<< index_end_label << endl;
+		}
 #line 1520 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
+  case 20:
+#line 170 "phase3.y" /* yacc.c:1646  */
+    {
+			cout << ": label" << index_label++ << endl;
+		}
+#line 1528 "phase3.tab.c" /* yacc.c:1646  */
+    break;
+
   case 21:
-#line 160 "phase3.y" /* yacc.c:1646  */
-    {cout << ": end" << index_end_label++ << endl;}
-#line 1526 "phase3.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 22:
-#line 162 "phase3.y" /* yacc.c:1646  */
-    {cout <<"! " << (yyvsp[0].op_val) << ", " << (yyvsp[0].op_val) << endl; cout << "?:= " << "label" << index_label << ", " << (yyvsp[0].op_val) << endl;}
-#line 1532 "phase3.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 23:
-#line 163 "phase3.y" /* yacc.c:1646  */
-    { cout << ": label" << index_label++ << endl;}
+#line 174 "phase3.y" /* yacc.c:1646  */
+    {
+			//cout << "WRONG GRAMMAR" << endl;
+			cout << ": end" << index_end_label++ << endl;
+			//cout << "WRONG GRAMMAR" << endl;
+		}
 #line 1538 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
-  case 24:
-#line 165 "phase3.y" /* yacc.c:1646  */
-    {whileStack.push(index_label++); cout << ": label" << whileStack.top() << endl;}
-#line 1544 "phase3.tab.c" /* yacc.c:1646  */
+  case 22:
+#line 181 "phase3.y" /* yacc.c:1646  */
+    {
+			//cout << "NO ELSE 1" << endl;
+			cout <<"! " << (yyvsp[0].op_val) << ", " << (yyvsp[0].op_val) << endl;
+			cout << "?:= " << "label" << index_label << ", " << (yyvsp[0].op_val) << endl;
+		}
+#line 1548 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
-  case 25:
-#line 166 "phase3.y" /* yacc.c:1646  */
+  case 23:
+#line 187 "phase3.y" /* yacc.c:1646  */
     {
-		// push stack
-		//whileStack.push("label" + index_label++);
-		//cout << ": label" << index_label << endl;
-		cout << "?:= loop_body" << whileStack.top() << ", " << (yyvsp[0].op_val) << endl;
-		cout << ":= loop_end" << whileStack.top() << endl;
-		cout << ": loop_body" << whileStack.top() << endl;
-	}
+			//cout << "NO ELSE" << endl;
+			cout << ": label" << index_label++ << endl;
+		}
 #line 1557 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
+  case 24:
+#line 193 "phase3.y" /* yacc.c:1646  */
+    {
+			whileStack.push(index_label++);
+			cout << ": label" << whileStack.top() << endl;
+		}
+#line 1566 "phase3.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 25:
+#line 198 "phase3.y" /* yacc.c:1646  */
+    {
+			// push stack
+			//whileStack.push("label" + index_label++);
+			//cout << ": label" << index_label << endl;
+			cout << "?:= loop_body" << whileStack.top() << ", " << (yyvsp[0].op_val) << endl;
+			cout << ":= loop_end" << whileStack.top() << endl;
+			cout << ": loop_body" << whileStack.top() << endl;
+		}
+#line 1579 "phase3.tab.c" /* yacc.c:1646  */
+    break;
+
   case 26:
-#line 175 "phase3.y" /* yacc.c:1646  */
+#line 207 "phase3.y" /* yacc.c:1646  */
     {
     // loop body.
 	}
-#line 1565 "phase3.tab.c" /* yacc.c:1646  */
+#line 1587 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 179 "phase3.y" /* yacc.c:1646  */
+#line 211 "phase3.y" /* yacc.c:1646  */
     {
    		// end of the loop
 		cout << ":= label" << whileStack.top() << endl;
@@ -1573,60 +1595,61 @@ yyreduce:
 		// pop stack
 		whileStack.pop();
 	}
-#line 1577 "phase3.tab.c" /* yacc.c:1646  */
+#line 1599 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 187 "phase3.y" /* yacc.c:1646  */
+#line 219 "phase3.y" /* yacc.c:1646  */
     {
 			
 		}
-#line 1585 "phase3.tab.c" /* yacc.c:1646  */
+#line 1607 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 191 "phase3.y" /* yacc.c:1646  */
+#line 223 "phase3.y" /* yacc.c:1646  */
     {
 			printf(".< %s\n", (yyvsp[0].op_val));
 		}
-#line 1593 "phase3.tab.c" /* yacc.c:1646  */
+#line 1615 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 195 "phase3.y" /* yacc.c:1646  */
+#line 227 "phase3.y" /* yacc.c:1646  */
     {
 			printf(".> %s\n", (yyvsp[0].op_val));
 		}
-#line 1601 "phase3.tab.c" /* yacc.c:1646  */
+#line 1623 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 199 "phase3.y" /* yacc.c:1646  */
+#line 231 "phase3.y" /* yacc.c:1646  */
     {
-			
+			//cout << "CONTIUNE" << endl;
+			cout << ":= label" << whileStack.top() << endl;			
 		}
-#line 1609 "phase3.tab.c" /* yacc.c:1646  */
+#line 1632 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 203 "phase3.y" /* yacc.c:1646  */
+#line 236 "phase3.y" /* yacc.c:1646  */
     {
 			
 		}
-#line 1617 "phase3.tab.c" /* yacc.c:1646  */
+#line 1640 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 217 "phase3.y" /* yacc.c:1646  */
+#line 250 "phase3.y" /* yacc.c:1646  */
     {
 			//std::cout<< "abcde"<<endl;
 			(yyval.op_val) = (yyvsp[0].op_val); 
 		}
-#line 1626 "phase3.tab.c" /* yacc.c:1646  */
+#line 1649 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 223 "phase3.y" /* yacc.c:1646  */
+#line 256 "phase3.y" /* yacc.c:1646  */
     {
 		char *src1 = (yyvsp[-2].op_val);
 		char *src2 = (yyvsp[0].op_val);
@@ -1638,11 +1661,11 @@ yyreduce:
 		cout << "+ " << *dest << ", " << *src1 << ", " << *src2 << endl;
 		(yyval.op_val) = (char*)dest->c_str();
 	}
-#line 1642 "phase3.tab.c" /* yacc.c:1646  */
+#line 1665 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 235 "phase3.y" /* yacc.c:1646  */
+#line 268 "phase3.y" /* yacc.c:1646  */
     {
 		char *src1 = (yyvsp[-2].op_val);
 		char *src2 = (yyvsp[0].op_val);
@@ -1654,20 +1677,20 @@ yyreduce:
 		cout << "- " << dest << ", " << src1 << ", " << src2 << endl;
 		(yyval.op_val) = (char*)dest->c_str();
 	}
-#line 1658 "phase3.tab.c" /* yacc.c:1646  */
+#line 1681 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 249 "phase3.y" /* yacc.c:1646  */
+#line 282 "phase3.y" /* yacc.c:1646  */
     { 
 			//cout<<"term: "<< $1 << endl; 
 			(yyval.op_val) = (yyvsp[0].op_val);
 		}
-#line 1667 "phase3.tab.c" /* yacc.c:1646  */
+#line 1690 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 255 "phase3.y" /* yacc.c:1646  */
+#line 288 "phase3.y" /* yacc.c:1646  */
     { 
 		char *src1 = (yyvsp[-2].op_val);
 		char *src2 = (yyvsp[0].op_val);
@@ -1679,11 +1702,11 @@ yyreduce:
 		cout << "* " << *dest << ", " << src1 << ", " << src2 << endl;
 		(yyval.op_val) = (char*)dest->c_str();
 		}
-#line 1683 "phase3.tab.c" /* yacc.c:1646  */
+#line 1706 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 267 "phase3.y" /* yacc.c:1646  */
+#line 300 "phase3.y" /* yacc.c:1646  */
     {
 		char *src1 = (yyvsp[-2].op_val);
 		char *src2 = (yyvsp[0].op_val);
@@ -1696,11 +1719,11 @@ yyreduce:
 		cout << "/ " << *dest << ", " << src1 << ", " << src2 << endl;
 		(yyval.op_val) = (char*)dest->c_str();
 		}
-#line 1700 "phase3.tab.c" /* yacc.c:1646  */
+#line 1723 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 280 "phase3.y" /* yacc.c:1646  */
+#line 313 "phase3.y" /* yacc.c:1646  */
     {
 		char *src1 = (yyvsp[-2].op_val);
 		char *src2 = (yyvsp[0].op_val);
@@ -1715,44 +1738,44 @@ yyreduce:
 		cout << "%" << *dest << ", " << src1 << ", " << src2 << endl;
 		(yyval.op_val) = (char*)dest->c_str();
 		}
-#line 1719 "phase3.tab.c" /* yacc.c:1646  */
+#line 1742 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 297 "phase3.y" /* yacc.c:1646  */
+#line 330 "phase3.y" /* yacc.c:1646  */
     {   
 			//cout<<"var: " << $1 << endl;
 			(yyval.op_val) = (yyvsp[0].op_val);
 
 		}
-#line 1729 "phase3.tab.c" /* yacc.c:1646  */
+#line 1752 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 303 "phase3.y" /* yacc.c:1646  */
+#line 336 "phase3.y" /* yacc.c:1646  */
     {
 			//cout<<"Number: " << $1 << endl;
 			(yyval.op_val) = (yyvsp[0].op_val);
 		}
-#line 1738 "phase3.tab.c" /* yacc.c:1646  */
+#line 1761 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 308 "phase3.y" /* yacc.c:1646  */
+#line 341 "phase3.y" /* yacc.c:1646  */
     {
 		(yyval.op_val) = (yyvsp[-1].op_val);
 	}
-#line 1746 "phase3.tab.c" /* yacc.c:1646  */
+#line 1769 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 311 "phase3.y" /* yacc.c:1646  */
+#line 344 "phase3.y" /* yacc.c:1646  */
     {}
-#line 1752 "phase3.tab.c" /* yacc.c:1646  */
+#line 1775 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 312 "phase3.y" /* yacc.c:1646  */
+#line 345 "phase3.y" /* yacc.c:1646  */
     {  
 		char buffer[10]; // Create buffer
 		string *dest = new string;
@@ -1760,49 +1783,49 @@ yyreduce:
 		*dest = string("temp") + buffer;
 		cout<< "call" << (char*)dest->c_str();
 	}
-#line 1764 "phase3.tab.c" /* yacc.c:1646  */
+#line 1787 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 329 "phase3.y" /* yacc.c:1646  */
+#line 362 "phase3.y" /* yacc.c:1646  */
     {  
 	  printf("param %s\n", (yyvsp[0].op_val));
 	}
-#line 1772 "phase3.tab.c" /* yacc.c:1646  */
+#line 1795 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 334 "phase3.y" /* yacc.c:1646  */
+#line 367 "phase3.y" /* yacc.c:1646  */
     {
 
 	}
-#line 1780 "phase3.tab.c" /* yacc.c:1646  */
+#line 1803 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 341 "phase3.y" /* yacc.c:1646  */
+#line 374 "phase3.y" /* yacc.c:1646  */
     {
 		(yyval.op_val) = (yyvsp[0].op_val);
 	}
-#line 1788 "phase3.tab.c" /* yacc.c:1646  */
+#line 1811 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 350 "phase3.y" /* yacc.c:1646  */
+#line 383 "phase3.y" /* yacc.c:1646  */
     {
 		(yyval.op_val) = (yyvsp[0].op_val);
 	}
-#line 1796 "phase3.tab.c" /* yacc.c:1646  */
+#line 1819 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 355 "phase3.y" /* yacc.c:1646  */
+#line 388 "phase3.y" /* yacc.c:1646  */
     {}
-#line 1802 "phase3.tab.c" /* yacc.c:1646  */
+#line 1825 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 359 "phase3.y" /* yacc.c:1646  */
+#line 392 "phase3.y" /* yacc.c:1646  */
     {
 		char *src1 = (yyvsp[-2].op_val);
 		char *src2 = (yyvsp[0].op_val);
@@ -1817,69 +1840,69 @@ yyreduce:
 		cout << " " << *dest << ", " << src1 << ", " << src2 << endl; // == dest, src1, src2
 		(yyval.op_val) = (char*)dest->c_str();
 	}
-#line 1821 "phase3.tab.c" /* yacc.c:1646  */
+#line 1844 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 391 "phase3.y" /* yacc.c:1646  */
+#line 424 "phase3.y" /* yacc.c:1646  */
     {
 		//$$=$1;
 		compStack.push("==");
 	}
-#line 1830 "phase3.tab.c" /* yacc.c:1646  */
+#line 1853 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 397 "phase3.y" /* yacc.c:1646  */
+#line 430 "phase3.y" /* yacc.c:1646  */
     {
 			compStack.push("!=");
 		}
-#line 1838 "phase3.tab.c" /* yacc.c:1646  */
+#line 1861 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 401 "phase3.y" /* yacc.c:1646  */
+#line 434 "phase3.y" /* yacc.c:1646  */
     {
 			compStack.push("<");
 		}
-#line 1846 "phase3.tab.c" /* yacc.c:1646  */
+#line 1869 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 405 "phase3.y" /* yacc.c:1646  */
+#line 438 "phase3.y" /* yacc.c:1646  */
     {
 			compStack.push(">");
 		}
-#line 1854 "phase3.tab.c" /* yacc.c:1646  */
+#line 1877 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 410 "phase3.y" /* yacc.c:1646  */
+#line 443 "phase3.y" /* yacc.c:1646  */
     {
 			compStack.push("<=");
 		}
-#line 1862 "phase3.tab.c" /* yacc.c:1646  */
+#line 1885 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 415 "phase3.y" /* yacc.c:1646  */
+#line 448 "phase3.y" /* yacc.c:1646  */
     {
 			compStack.push(">=");
 		}
-#line 1870 "phase3.tab.c" /* yacc.c:1646  */
+#line 1893 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 422 "phase3.y" /* yacc.c:1646  */
+#line 455 "phase3.y" /* yacc.c:1646  */
     {
 			//cout << "ident: " << $1 << endl;
 			(yyval.op_val) = (yyvsp[0].op_val);
 	}
-#line 1879 "phase3.tab.c" /* yacc.c:1646  */
+#line 1902 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 427 "phase3.y" /* yacc.c:1646  */
+#line 460 "phase3.y" /* yacc.c:1646  */
     { 
 		char *src1 = (yyvsp[-3].op_val);
 		char *src2 = (yyvsp[-1].op_val);
@@ -1890,11 +1913,11 @@ yyreduce:
 		cout << ". " << *dest << endl;
 		cout << "=[]" << *dest << ", " << src1 << ", " << src2 << endl;
 	}
-#line 1894 "phase3.tab.c" /* yacc.c:1646  */
+#line 1917 "phase3.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1898 "phase3.tab.c" /* yacc.c:1646  */
+#line 1921 "phase3.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2122,7 +2145,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 455 "phase3.y" /* yacc.c:1906  */
+#line 488 "phase3.y" /* yacc.c:1906  */
 
 
 int main(int argc, char **argv)
