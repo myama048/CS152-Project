@@ -150,11 +150,11 @@ identifiers:
 
 statement: 
 	var ASSIGN expression
-{
-  char *dest = $1;
-  char *src  = $3;
-  printf("= %s, %s\n", dest, src);
-}
+		{
+ 			char *dest = $1;
+ 			char *src  = $3;
+ 			printf("= %s, %s\n", dest, src);
+		}
 
 	| IF bool_exp 
 		{	
@@ -162,15 +162,15 @@ statement:
 			cout << "! " << $2 << ", " << $2 << endl;
 			cout << "?:= " << "label" << index_label << ", " << $2 << endl;
 		}
-	 THEN statements
+	 	THEN statements
 		{
 			cout << ":= end"<< index_end_label << endl;
 		}
-	 ELSE
+		ELSE
 		{
 			cout << ": label" << index_label++ << endl;
 		}
-	statements ENDIF
+		statements ENDIF
 		{
 			//cout << "WRONG GRAMMAR" << endl;
 			cout << ": end" << index_end_label++ << endl;
@@ -179,22 +179,21 @@ statement:
 	
 	| IF bool_exp
 		{
-			//cout << "NO ELSE 1" << endl;
+			//cout << "RIGHT GRAMMAR1" << endl;
 			cout <<"! " << $2 << ", " << $2 << endl;
 			cout << "?:= " << "label" << index_label << ", " << $2 << endl;
 		}
-	THEN statements ENDIF
+		THEN statements ENDIF
 		{
 			//cout << "NO ELSE" << endl;
 			cout << ": label" << index_label++ << endl;
-		}
-	
+		}	
 	| WHILE 
 		{
 			whileStack.push(index_label++);
 			cout << ": label" << whileStack.top() << endl;
 		}
-	relation_exp 
+		relation_exp 
 		{
 			// push stack
 			//whileStack.push("label" + index_label++);
@@ -203,18 +202,18 @@ statement:
 			cout << ":= loop_end" << whileStack.top() << endl;
 			cout << ": loop_body" << whileStack.top() << endl;
 		}
-        BEGINLOOP statements
-	{
-    // loop body.
-	} 
-	ENDLOOP
-	{
-   		// end of the loop
-		cout << ":= label" << whileStack.top() << endl;
-   		cout << ": loop_end" << whileStack.top() << endl;
-		// pop stack
-		whileStack.pop();
-	}
+        	BEGINLOOP statements
+		{
+    			// loop body.
+		} 
+		ENDLOOP
+		{
+   			// end of the loop
+			cout << ":= label" << whileStack.top() << endl;
+   			cout << ": loop_end" << whileStack.top() << endl;
+			// pop stack
+			whileStack.pop();
+		}
 	| DO BEGINLOOP statements ENDLOOP WHILE bool_exp
 		{
 			
